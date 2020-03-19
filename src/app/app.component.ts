@@ -6,7 +6,6 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {DevicesService} from './service/devices.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
-import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
 @Component({
     selector: 'app-root',
@@ -21,8 +20,7 @@ export class AppComponent {
         private backgroundMode: BackgroundMode,
         private sqlite: SQLite,
         private devicesService: DevicesService,
-        private bluetoothLE: BluetoothLE,
-        private androidPermissions: AndroidPermissions
+        private bluetoothLE: BluetoothLE
     ) {
         this.initializeApp();
     }
