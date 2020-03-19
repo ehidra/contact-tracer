@@ -26,15 +26,15 @@ export class HomePage {
         private bluetoothSerial: BluetoothSerial) {
 
         this.platform.ready().then((readySource) => {
-            console.log('Platform ready from', readySource);
-
+            // console.log('Platform ready from', readySource);
+            // console.log("Device info:" + this.device.manufacturer + this.device.platform + this.device.serial);
             const config = {
                 request: true,
                 statusReceiver: true,
                 restoreKey: 'bluetoothlesavetheworld'
             };
             this.bluetoothLE.initialize(config).subscribe(ble => {
-                console.log('ble', ble.status); // logs 'enabled'
+                // console.log('ble', ble.status); // logs 'enabled'
                 this.adapterInfo();
                 this.devicesService.truncate();
                 this.startScan();
@@ -46,43 +46,64 @@ export class HomePage {
     adapterInfo() {
         this.bluetoothLE.getAdapterInfo().then((adapterInfo) => {
             this.myDevice = adapterInfo;
-            console.log('startScan: ' + JSON.stringify(this.myDevice));
+            // console.log('startScan: ' + JSON.stringify(this.myDevice));
         });
     }
 
     startScan() {
 
-
-        this.bluetoothSerial.discoverUnpaired().then((success) => {
-            console.log('discoverUnpaired: ' + JSON.stringify(success));
-            success.forEach(device => {
-                this.addDevice(device);
-            });
-        }, (error) => {
-            console.log(' discoverUnpaired error: ' + JSON.stringify(error));
-        });
-
-
+        this.isScanning = true;
         const params = {
             services: [],
             allowDuplicates: false,
         };
         this.bluetoothLE.startScan(params).subscribe((success) => {
-
-            this.isScanning = true;
             console.log('startScan: ' + JSON.stringify(success));
             if (success.status === 'scanResult') {
                 this.addDevice(success);
             }
-
         }, (error) => {
             console.log('error: ' + JSON.stringify(error));
         });
+        this.discoverUnpaired();
+        this.delay(5000).then((result) => {
+                this.stopScan();
+                this.delay(5000).then((result) => {
+                        this.startScan();
+                    }, (error) => {
+                    }
+                );
+            }, (error) => {
+            }
+        );
+    }
+
+    discoverUnpaired() {
+        this.bluetoothSerial.discoverUnpaired().then((success) => {
+            console.log('discoverUnpaired: ' + JSON.stringify(success));
+            var uniqueDeviceList = [];
+            var uniqueDeviceObjectList = [];
+            success.forEach(device => {
+                if (uniqueDeviceList.indexOf(device.address) === -1) {
+                    uniqueDeviceList.push(device.address);
+                    uniqueDeviceObjectList.push(device);
+                }
+            });
+            uniqueDeviceObjectList.forEach(device => {
+                this.addDevice(device);
+            });
+        }, (error) => {
+            console.log(' discoverUnpaired error: ' + JSON.stringify(error));
+        });
+    }
+
+    private delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     stopScan() {
         this.bluetoothLE.stopScan().then((resp) => {
-            console.log('stopScan: ' + JSON.stringify(resp));
+            // console.log('stopScan: ' + JSON.stringify(resp));
             this.isScanning = false;
         });
     }
@@ -91,7 +112,12 @@ export class HomePage {
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-mm-dd');
         const timeString = this.datePipe.transform(dateNow, 'hh:mm:ss');
-        this.devicesService.create({device: device.address, device_name: device.name, date_found: dateString, time_found: timeString});
+        this.devicesService.create({
+            device: device.address,
+            device_name: device.name,
+            date_found: dateString,
+            time_found: timeString
+        });
 
     }
 

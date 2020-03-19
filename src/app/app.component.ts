@@ -30,7 +30,7 @@ export class AppComponent {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             this.permission();
-            this.backgroundMode.setDefaults({ silent: true });
+            this.backgroundMode.setDefaults({silent: true});
             this.backgroundMode.enable();
             this.createDatabase();
         });
@@ -46,7 +46,7 @@ export class AppComponent {
                 return this.devicesService.createTable();
             })
             .then(() => {
-                console.log('Data base set up correctly');
+                // console.log('Data base set up correctly');
             })
             .catch(error => {
                 console.error(error);
@@ -62,7 +62,7 @@ export class AppComponent {
                 if (hasPermissionSuccess.hasPermission === false) {
                     this.bluetoothLE.requestPermission().then(
                         requestPermission => {
-                            console.log('Otorgado?', JSON.stringify(requestPermission));
+                            // console.log('Otorgado?', JSON.stringify(requestPermission));
                         },
                         requestPermissionError => {
                             console.log('requestPermissionError.');
@@ -80,7 +80,7 @@ export class AppComponent {
                 if (locationEnable.isLocationEnabled === false) {
                     this.bluetoothLE.requestLocation().then(
                         requestLocation => {
-                            console.log('Otorgado?', JSON.stringify(requestLocation));
+                            //  console.log('Otorgado?', JSON.stringify(requestLocation));
                         },
                         requestPermissionError => {
                             console.log('requestLocationError.');
