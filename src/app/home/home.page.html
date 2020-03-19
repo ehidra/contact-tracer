@@ -1,0 +1,40 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Blank
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <div *ngIf="this.myDevice">
+                    <div>Address: {{this.myDevice.address}}</div>
+                    <div>Name: {{this.myDevice.name}}</div>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <ion-button *ngIf="this.isScanning === false" (click)="startScan()">Start Scan</ion-button>
+                <ion-button *ngIf="this.isScanning === true" (click)="stopScan()">Stop Scan</ion-button>
+                <ion-button (click)="getAll()">List Devices</ion-button>
+                <ion-button (click)="clean()">Clean Devices</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <ion-list>
+                    <ion-item *ngFor="let device of this.devices; let even = even" [color]="even? '' : 'light'"
+                              lines="none">
+                        <ion-label class="ion-text-wrap">
+                            {{device.device}} / {{device.device_name}} / {{device.date_found}} /  {{device.time_found}}
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

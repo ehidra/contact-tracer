@@ -1,0 +1,7 @@
+{
+  "name": "savetheworldionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,10 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "savetheworldionic",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {},
+  "linuxAndroidStudioPath": "/home/carlos/android-studio/bin/studio.sh"
+
+}
