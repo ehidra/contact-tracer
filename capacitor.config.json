@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "savetheworldionic",
+  "appId": "memiah.app.contacttracer",
+  "appName": "contact-tracer",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
