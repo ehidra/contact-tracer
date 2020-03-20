@@ -8,6 +8,8 @@ import {HomePage} from './home.page';
 import {DatePipe} from '@angular/common';
 import {Device} from '@ionic-native/device/ngx';
 import {BluetoothSerial} from '@ionic-native/bluetooth-serial/ngx';
+import {UniqueDeviceID} from '@ionic-native/unique-device-id/ngx';
+import {IBeacon} from '@ionic-native/ibeacon/ngx';
 
 @NgModule({
     imports: [
@@ -21,7 +23,7 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial/ngx';
             }
         ])
     ],
-    providers: [BluetoothLE, DatePipe, Device, BluetoothSerial],
+    providers: [BluetoothLE, DatePipe, Device, BluetoothSerial, UniqueDeviceID, IBeacon],
     declarations: [HomePage]
 })
 export class HomePageModule {
