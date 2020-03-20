@@ -1,5 +1,5 @@
 {
-  "name": "savetheworldionic",
+  "name": "contact-tracer",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -21,6 +21,7 @@
     "@angular/router": "~8.2.14",
     "@capacitor/android": "^1.5.1",
     "@capacitor/core": "1.5.1",
+    "@capacitor/ios": "^1.5.1",
     "@ionic-native/background-mode": "^5.22.0",
     "@ionic-native/bluetooth-le": "^5.22.0",
     "@ionic-native/bluetooth-serial": "^5.22.0",

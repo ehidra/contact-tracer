@@ -31,7 +31,7 @@ export class HomePage {
             const config = {
                 request: true,
                 statusReceiver: true,
-                restoreKey: 'bluetoothlesavetheworld'
+                restoreKey: 'bluetoothlecontacttracer'
             };
             this.bluetoothLE.initialize(config).subscribe(ble => {
                 // console.log('ble', ble.status); // logs 'enabled'
