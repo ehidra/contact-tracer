@@ -5,6 +5,8 @@ import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {DatePipe} from '@angular/common';
 import {Device} from '@ionic-native/device/ngx';
 import {BluetoothSerial} from '@ionic-native/bluetooth-serial/ngx';
+import {UniqueDeviceID} from '@ionic-native/unique-device-id/ngx';
+import {IBeacon} from '@ionic-native/ibeacon/ngx';
 
 @Component({
     selector: 'app-home',
@@ -14,8 +16,10 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial/ngx';
 export class HomePage {
 
     private devices: any = [];
-    private myDevice: object = null;
+    private myDevice: any = null;
     private isScanning = false;
+    private beaconData = {};
+
 
     constructor(
         private devicesService: DevicesService,
@@ -23,22 +27,35 @@ export class HomePage {
         private platform: Platform,
         private datePipe: DatePipe,
         private device: Device,
-        private bluetoothSerial: BluetoothSerial) {
+        private bluetoothSerial: BluetoothSerial,
+        private uniqueDeviceID: UniqueDeviceID,
+        private ibeacon: IBeacon) {
 
         this.platform.ready().then((readySource) => {
             // console.log('Platform ready from', readySource);
             // console.log("Device info:" + this.device.manufacturer + this.device.platform + this.device.serial);
-            const config = {
-                request: true,
-                statusReceiver: true,
-                restoreKey: 'bluetoothlecontacttracer'
-            };
-            this.bluetoothLE.initialize(config).subscribe(ble => {
-                // console.log('ble', ble.status); // logs 'enabled'
-                this.adapterInfo();
-                this.devicesService.truncate();
-                this.startScan();
+
+            this.uniqueDeviceID.get().then((uuid: any) => {
+                this.myDevice = uuid;
+                console.log('Getting UUID: ' + this.myDevice);
+                this.iBeaconStart();
+
+            }, (error) => {
+                console.log('error getting UUID: ' + JSON.stringify(error));
             });
+
+            //
+            // const config = {
+            //    request: true,
+            //    statusReceiver: true,
+            //    restoreKey: 'bluetoothlecontacttracer'
+            // };
+            // this.bluetoothLE.initialize(config).subscribe(ble => {
+            //    // console.log('ble', ble.status); // logs 'enabled'
+            //    this.adapterInfo();
+            //    this.devicesService.truncate();
+            //    this.startScan();
+            // });
 
         });
     }
@@ -47,6 +64,57 @@ export class HomePage {
         this.bluetoothLE.getAdapterInfo().then((adapterInfo) => {
             this.myDevice = adapterInfo;
             // console.log('startScan: ' + JSON.stringify(this.myDevice));
+        });
+    }
+
+    iBeaconStart() {
+        // Request permission to use location on iOS
+        this.ibeacon.requestAlwaysAuthorization().then((response) => {
+            // create a new delegate and register it with the native layer
+            const delegate = this.ibeacon.Delegate();
+
+            // Subscribe to some of the delegate's event handlers
+            delegate.didRangeBeaconsInRegion()
+                .subscribe(
+                    data => console.log('Beacon didRangeBeaconsInRegion: ', JSON.stringify(data)),
+                    error => console.error()
+                );
+            delegate.didStartMonitoringForRegion()
+                .subscribe(
+                    data => console.log('Beacon didStartMonitoringForRegion: ', JSON.stringify(data)),
+                    error => console.error()
+                );
+            delegate.didEnterRegion()
+                .subscribe(
+                    data => {
+                        console.log('Beacon didEnterRegion: ', JSON.stringify(data));
+                        this.beaconData = data;
+                    }
+                );
+
+            delegate.didExitRegion().subscribe(
+                (data) => {
+                    console.log('Beacon didExitRegion: ', JSON.stringify(data));
+                }
+            );
+            const beaconRegion = this.ibeacon.BeaconRegion('contact-tracer-beacon', this.myDevice);
+
+            this.ibeacon.startMonitoringForRegion(beaconRegion)
+                .then(
+                    () => console.log('Beacon Native layer received the request to monitoring'),
+                    error => console.error('Beacon Native layer failed to begin monitoring: ', JSON.stringify(error))
+                );
+
+            this.ibeacon.startRangingBeaconsInRegion(beaconRegion)
+                .then(() => {
+                    console.log('Beacon Started ranging beacon region: ', JSON.stringify(beaconRegion));
+                })
+                .catch((error: any) => {
+                    console.error('Beacon  to start ranging beacon region: ', JSON.stringify(beaconRegion));
+                });
+
+        }, (error) => {
+
         });
     }
 
@@ -66,9 +134,9 @@ export class HomePage {
             console.log('error: ' + JSON.stringify(error));
         });
         this.discoverUnpaired();
-        this.delay(5000).then((result) => {
+        this.delay(5000).then((resultFirstDelay) => {
                 this.stopScan();
-                this.delay(5000).then((result) => {
+                this.delay(5000).then((resultSecondDelay) => {
                         this.startScan();
                     }, (error) => {
                     }
@@ -81,8 +149,8 @@ export class HomePage {
     discoverUnpaired() {
         this.bluetoothSerial.discoverUnpaired().then((success) => {
             console.log('discoverUnpaired: ' + JSON.stringify(success));
-            var uniqueDeviceList = [];
-            var uniqueDeviceObjectList = [];
+            const uniqueDeviceList = [];
+            const uniqueDeviceObjectList = [];
             success.forEach(device => {
                 if (uniqueDeviceList.indexOf(device.address) === -1) {
                     uniqueDeviceList.push(device.address);

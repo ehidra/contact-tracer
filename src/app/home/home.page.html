@@ -11,11 +11,16 @@
         <ion-row class="ion-justify-content-center">
             <ion-col size-md="6" size-lg="6" size-xs="12">
                 <div *ngIf="this.myDevice">
-                    <div>Address: {{this.myDevice.address}}</div>
-                    <div>Name: {{this.myDevice.name}}</div>
+                    <div>My Device: {{this.myDevice}}</div>
                 </div>
             </ion-col>
         </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                {{beaconData | json}}
+            </ion-col>
+        </ion-row>
+
         <ion-row class="ion-justify-content-center">
             <ion-col size-md="6" size-lg="6" size-xs="12">
                 <ion-button *ngIf="this.isScanning === false" (click)="startScan()">Start Scan</ion-button>
