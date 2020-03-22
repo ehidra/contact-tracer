@@ -44,6 +44,8 @@
 	<string>Always allow Geolocation?</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow Geolocation?</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+    <string>We need to usage as peripheral to communicate the UUID automatically</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To Record Audio With Video</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
