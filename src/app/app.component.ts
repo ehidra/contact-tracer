@@ -29,7 +29,7 @@ export class AppComponent {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            if (this.platform.is('android')){
+            if (this.platform.is('android')) {
                 this.permission();
             }
             this.backgroundMode.setDefaults({silent: true});
@@ -45,7 +45,11 @@ export class AppComponent {
         })
             .then((db) => {
                 this.devicesService.setDatabase(db);
-                return this.devicesService.createTable();
+                this.devicesService.createTable().then((successCreateTable) => {
+                    this.devicesService.truncate();
+                }, (errorCreateTable) => {
+                    console.log('errorCreateTable: ' + JSON.stringify(errorCreateTable));
+                });
             })
             .then(() => {
                 // console.log('Data base set up correctly');

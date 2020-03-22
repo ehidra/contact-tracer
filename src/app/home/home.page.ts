@@ -24,7 +24,7 @@ export class HomePage {
             this.uniqueDeviceID.get().then((uuid: any) => {
                 this.myDevice = uuid;
                 console.log('Getting UUID: ' + this.myDevice);
-                // this.devicesService.truncate();
+
                 this.bluetoothleService.initializeCentral();
                 this.bluetoothleService.initializePeripheral(this.myDevice);
 
