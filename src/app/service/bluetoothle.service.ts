@@ -284,19 +284,12 @@ export class BluetoothleService {
     }
 
 
-    private
-
-    delay(ms
-              :
-              number
-    ) {
+    private delay(ms : number ) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
 
-    private
-
-    addDevice(device) {
+    private addDevice(device) {
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
         const timeString = this.datePipe.transform(dateNow, 'hh:mm:ss');
