@@ -29,7 +29,9 @@ export class AppComponent {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            this.permission();
+            if (this.platform.is('android')){
+                this.permission();
+            }
             this.backgroundMode.setDefaults({silent: true});
             this.backgroundMode.enable();
             this.createDatabase();

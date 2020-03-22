@@ -21,7 +21,7 @@ export class BluetoothleService {
         // Initialise the central service for the bluetoothle
         const config = {
             request: true,
-            statusReceiver: true,
+            statusReceiver: false,
             restoreKey: 'bluetoothlecontacttracercentral'
         };
         this.bluetoothLE.initialize(config).subscribe(successInitialize => {
@@ -32,7 +32,10 @@ export class BluetoothleService {
                 this.bluetoothLE.enable();
                 this.startScan();
             }
-        });
+        }, (errorRespond) => {
+            console.log('Respond Error: ' + JSON.stringify(errorRespond));
+        })
+    );
     }
 
     initializePeripheral(UUID) {
