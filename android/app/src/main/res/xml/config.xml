@@ -9,10 +9,6 @@
     <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundModeExt"/>
   </feature>
 
-  <feature name="BluetoothSerial">
-    <param name="android-package" value="com.megster.cordova.BluetoothSerial"/>
-  </feature>
-
   <feature name="BluetoothLePlugin">
     <param name="android-package" value="com.randdusing.bluetoothle.BluetoothLePlugin"/>
   </feature>

@@ -15,19 +15,15 @@
                 </div>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-justify-content-center">
-            <ion-col size-md="6" size-lg="6" size-xs="12">
-                {{beaconData | json}}
-            </ion-col>
-        </ion-row>
 
         <ion-row class="ion-justify-content-center">
             <ion-col size-md="6" size-lg="6" size-xs="12">
-                <ion-button *ngIf="this.isScanning === false" (click)="startScan()">Start Scan</ion-button>
-                <ion-button *ngIf="this.isScanning === true" (click)="stopScan()">Stop Scan</ion-button>
-                <ion-button (click)="getAll()">List Devices</ion-button>
-                <ion-button (click)="clean()">Clean Devices</ion-button>
+                <ion-button *ngIf="this.checkIfScanning() === false" (click)="startScan()">Start Scan</ion-button>
+                <ion-button *ngIf="this.checkIfScanning() === true" (click)="stopScan()">Stop Scan</ion-button>
+                <ion-button (click)="getAllDevices()">List Devices</ion-button>
+                <ion-button (click)="cleanDevices()">Clean Devices</ion-button>
                 <ion-button (click)="startAdvertisingPeripheral()">Start Advertising</ion-button>
+                <ion-button (click)="startScan()">Start Scan</ion-button>
             </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-center">

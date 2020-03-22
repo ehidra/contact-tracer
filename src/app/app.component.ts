@@ -55,40 +55,39 @@ export class AppComponent {
 
     private permission() {
 
-
         this.bluetoothLE.hasPermission().then(
-            hasPermissionSuccess => {
-                console.log('Has permission?', JSON.stringify(hasPermissionSuccess));
-                if (hasPermissionSuccess.hasPermission === false) {
+            successHasPermission => {
+                console.log('hasPermission?' + JSON.stringify(successHasPermission));
+                if (successHasPermission.hasPermission === false) {
                     this.bluetoothLE.requestPermission().then(
-                        requestPermission => {
-                            // console.log('Otorgado?', JSON.stringify(requestPermission));
+                        successRequestPermission => {
+                            console.log('successRequestPermission' + JSON.stringify(successRequestPermission));
                         },
                         requestPermissionError => {
-                            console.log('requestPermissionError.');
+                            console.log('requestPermissionError' + JSON.stringify(requestPermissionError));
                         });
                 }
             },
-            hasPermissionError => {
-                console.log('hasPermissionError');
+            errorHasPermission => {
+                console.log('errorHasPermission' + JSON.stringify(errorHasPermission));
             });
 
 
         this.bluetoothLE.isLocationEnabled().then(
-            locationEnable => {
-                console.log('Otorgado?', JSON.stringify(locationEnable));
-                if (locationEnable.isLocationEnabled === false) {
+            successLocationEnable => {
+                console.log('isLocationEnabled?' + JSON.stringify(successLocationEnable));
+                if (successLocationEnable.isLocationEnabled === false) {
                     this.bluetoothLE.requestLocation().then(
-                        requestLocation => {
-                            //  console.log('Otorgado?', JSON.stringify(requestLocation));
+                        successRequestLocation => {
+                            console.log('requestLocation' + JSON.stringify(successRequestLocation));
                         },
-                        requestPermissionError => {
-                            console.log('requestLocationError.');
+                        errorRequestLocation => {
+                            console.log('Error RequestLocation' + JSON.stringify(errorRequestLocation));
                         });
                 }
             },
-            locationEnableError => {
-                console.log('locationEnable.');
+            errorLocationEnable => {
+                console.log('locationEnableError' + JSON.stringify(errorLocationEnable));
             });
     }
 }

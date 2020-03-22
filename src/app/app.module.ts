@@ -9,6 +9,7 @@ import {SQLite} from '@ionic-native/sqlite/ngx';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
+import {DatePipe} from '@angular/common';
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [],
@@ -19,7 +20,8 @@ import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
         BackgroundMode,
         SQLite,
-        BluetoothLE
+        BluetoothLE,
+        DatePipe
     ],
     bootstrap: [AppComponent]
 })
