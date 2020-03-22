@@ -56,6 +56,40 @@ export class BluetoothleService {
 
             console.log('initializePeripheral: ' + JSON.stringify(successInitializePeripheralResult));
 
+            if (successInitializePeripheralResult.status === 'enabled') {
+                // We create the Blueetoothle service
+                const characteristics = {
+                    service: '1234',
+                    characteristics: [
+                        {
+                            uuid: 'ABCD',
+                            permissions: {
+                                read: true,
+                                write: true,
+                                // readEncryptionRequired: true,
+                                // writeEncryptionRequired: true,
+                            },
+                            properties: {
+                                read: true,
+                                writeWithoutResponse: true,
+                                write: true,
+                                notify: true,
+                                indicate: true,
+                                // authenticatedSignedWrites: true,
+                                // notifyEncryptionRequired: true,
+                                // indicateEncryptionRequired: true,
+                            }
+                        }
+                    ]
+                };
+                this.bluetoothLE.addService(characteristics).then((successAddService) => {
+                    console.log('Peripheral addService: ' + JSON.stringify(successAddService));
+                    this.advertisePeripheral();
+                }, (errorAddService) => {
+                    console.log('Peripheral addService Error: ' + JSON.stringify(errorAddService));
+                });
+            }
+
             // If read request received just send the phone UUID so we now who is in the other end
             if (successInitializePeripheralResult.status === 'readRequested') {
 
@@ -79,37 +113,6 @@ export class BluetoothleService {
             console.log('initializePeripheralError: ' + JSON.stringify(errorInitializePeripheralResult));
         });
 
-        // We create the Blueetoothle service
-        const characteristics = {
-            service: '1234',
-            characteristics: [
-                {
-                    uuid: 'ABCD',
-                    permissions: {
-                        read: true,
-                        write: true,
-                        // readEncryptionRequired: true,
-                        // writeEncryptionRequired: true,
-                    },
-                    properties: {
-                        read: true,
-                        writeWithoutResponse: true,
-                        write: true,
-                        notify: true,
-                        indicate: true,
-                        // authenticatedSignedWrites: true,
-                        // notifyEncryptionRequired: true,
-                        // indicateEncryptionRequired: true,
-                    }
-                }
-            ]
-        };
-        this.bluetoothLE.addService(characteristics).then((successAddService) => {
-            console.log('Peripheral addService: ' + JSON.stringify(successAddService));
-            this.advertisePeripheral();
-        }, (errorAddService) => {
-            console.log('Peripheral addService Error: ' + JSON.stringify(errorAddService));
-        });
 
     }
 
@@ -283,7 +286,7 @@ export class BluetoothleService {
     }
 
 
-    private delay(ms: number ) {
+    private delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
