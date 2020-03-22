@@ -28,26 +28,32 @@ We would like to invite app developers from around the world to assist us in the
 
 The ideal app would be:
 
-Cross platform on Android and iOS
-Supported by as many devices as possible, but at least those 3-4 years old.
-Able to scan devices while offline, e.g. when travelling underground or in a remote area. 
-Free to distribute (software only preferable)
+* Able to communicate peer to peer over BLE, Bluetooth or Wifi 
+* Cross platform on Android and iOS
+* Supported by as many devices as possible, but at least those 3-4 years old.
+* Able to scan devices while offline, e.g. when travelling underground or in a remote area without Internet access.
+* Able to run while in the background
+* Free to distribute (software only preferable)
+
+Initially we were planning to identify all devices nearby by their bluetooth MAC addresses, however we now realise this is not feasible as, for privacy reasons, they are hidden from app developers in iOS, also some devices with randomise their MAC address when communicating with others and we are not sure if it is possible for an app developer to access all the addresses that have been used. Our current thinking is to use Bluetooth Low Energy (BLE) to exchange information through Generic Access Profile (GAP) and/or Generic Attribute Profile Services (GATT).
 
 We have already begun working on a prototype, and are evaluating the following options:
 
 |Technology|Pros|Cons|
 |----------|----|----|
-|Bluetooth LE|Widely supported No internet dependent Hardware IDs available on Android |iOS hides hardware addresses, and replaces them with a UUID only valid for your device. The mapping algorithm is not public.|
+|Bluetooth LE|Widely supported. No internet dependent. Hardware IDs available on Android. BLE Service Advertisement approach could work if we only want to track other app users. |iOS hides hardware addresses, and replaces them with a UUID only valid for your device. The mapping algorithm is not public. We may be able to use BLE to advertise a service amongst app users, but it’s unclear whether Android can discover iOS apps that are advertising in the background. |
 |iBeacon - app based|Your phone can advertise a unique id given by the app itself and detect others|Advertise ID only works for IOS Android can only detect|
 |Beacon - hardware based|Will work across devices and is used already.Beacon does the advertising and the App just monitors that your beacon is with you and looks for other beacons.|Extra configuration for the beacons and extra cost for the devices (probably will need to choose just one type of device)|
 |WiFi Aware|||
 |Nearby Connections API|Uses WiFI Aware and Bluetooth LE recognising devices around you|Only valid for Android
 |Nearby Messages API|Valid for IOS and Android even though the connecting process is different of what we want for this|Needs internet connection|
 |p2pkit|Seems to have a solution that has been tested already across IOS and Android|Not updated for 3 years Needs internet connection|
+|MultipeerConnectivity|A framework for offline data transmission between Apple devices. Open source library available.| Maybe only runs while the app is in the foreground? iOS only.|
+|Wifi Direct||Android only, not compatible with iOS."
 
 We are primarily web app developers, so we are looking for engineers with experience in hardware communication who can help.
 
-## Authors
+## Contributors
 
 * Paul Maunders - UK 
 * Carlos Morillo Merino - Spain
