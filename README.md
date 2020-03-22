@@ -57,3 +57,23 @@ We are primarily web app developers, so we are looking for engineers with experi
 
 * Paul Maunders - UK 
 * Carlos Morillo Merino - Spain
+
+## The prototype (working for IOS and Android)
+
+At the end we decided to go with the Buetooth LE approach and we have build a prototype.
+
+We are using Ionic 4 + Capacitor for it . If you want to have a go this should get you up and running quickly.
+We are relying heavily on this plugin https://github.com/randdusing/cordova-plugin-bluetoothle
+There are some issues we have still to solve but it does work.
+
+At the moment Background mode only work for Android but IOS should be also possible just have to iron it out.
+
+git clone repository
+npm install within the repo root
+ionic capacitor run android
+ionic capacitor run ios
+
+
+The whole point of the app is being able to recognise and connect to other devices no matter the platform and exchange 
+UUID's. Then that should prove two people have been in contact. We have still to improve the proccess testing the scans 
+and advertise as peripheral cycles. The results are stored in a in-app SQLite data base.
