@@ -26,6 +26,7 @@ export class BluetoothleService {
             statusReceiver: false,
             restoreKey: 'bluetoothlecontacttracercentral'
         };
+        console.log(' Initialize params ' + JSON.stringify(config));
         this.bluetoothLE.initialize(config).subscribe(successInitialize => {
             console.log('Initialize: ' + JSON.stringify(successInitialize));
             // start the scan of devices BLE
@@ -37,8 +38,6 @@ export class BluetoothleService {
                     this.bluetoothLE.enable();
                     this.startScan();
                 }
-
-
             }
         }, (errorInitialize) => {
             console.log('Error Initialize: ' + JSON.stringify(errorInitialize));
