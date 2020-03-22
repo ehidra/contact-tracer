@@ -118,11 +118,11 @@ export class BluetoothleService {
 
     advertisePeripheral() {
         this.startAdvertising();
-        this.delay(15000).then((resultFirstDelay) => {
-                this.advertisePeripheral();
-            }, (error) => {
-            }
-        );
+        // this.delay(15000).then((resultFirstDelay) => {
+        //        this.advertisePeripheral();
+        //    }, (error) => {
+        //    }
+        // );
     }
 
 
