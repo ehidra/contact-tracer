@@ -284,7 +284,7 @@ export class BluetoothleService {
     }
 
 
-    private delay(ms : number ) {
+    private delay(ms: number ) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
