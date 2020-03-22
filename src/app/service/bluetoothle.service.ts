@@ -62,7 +62,7 @@ export class BluetoothleService {
                     service: '1234',
                     characteristics: [
                         {
-                            uuid: 'ABCD',
+                            uuid: '2ab4aacd-ccea-4cf8-9f27-a25fe60ac5f0',
                             permissions: {
                                 read: true,
                                 write: true,
@@ -243,7 +243,7 @@ export class BluetoothleService {
             const readParam = {
                 address: addressDevice,
                 service: '1234',
-                characteristic: 'ABCD'
+                characteristic: '2ab4aacd-ccea-4cf8-9f27-a25fe60ac5f0'
             };
             this.bluetoothLE.read(readParam).then((successRead) => {
                 console.log('read: ' + JSON.stringify(successRead));
