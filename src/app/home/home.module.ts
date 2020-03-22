@@ -6,10 +6,8 @@ import {RouterModule} from '@angular/router';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {HomePage} from './home.page';
 import {DatePipe} from '@angular/common';
-import {Device} from '@ionic-native/device/ngx';
 import {BluetoothSerial} from '@ionic-native/bluetooth-serial/ngx';
 import {UniqueDeviceID} from '@ionic-native/unique-device-id/ngx';
-import {IBeacon} from '@ionic-native/ibeacon/ngx';
 
 @NgModule({
     imports: [
@@ -23,7 +21,7 @@ import {IBeacon} from '@ionic-native/ibeacon/ngx';
             }
         ])
     ],
-    providers: [BluetoothLE, DatePipe, Device, BluetoothSerial, UniqueDeviceID, IBeacon],
+    providers: [BluetoothLE, DatePipe, BluetoothSerial, UniqueDeviceID ],
     declarations: [HomePage]
 })
 export class HomePageModule {
