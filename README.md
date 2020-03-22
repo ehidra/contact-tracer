@@ -68,10 +68,10 @@ There are some issues we have still to solve but it does work.
 
 At the moment Background mode only work for Android but IOS should be also possible just have to iron it out.
 
-git clone repository
-npm install within the repo root
-ionic capacitor run android
-ionic capacitor run ios
+* git clone repository
+* npm install within the repo root
+* ionic capacitor run android
+* ionic capacitor run ios
 
 
 The whole point of the app is being able to recognise and connect to other devices no matter the platform and exchange 
