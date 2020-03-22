@@ -1,7 +1,7 @@
-COVID-19 Contact Tracer
+# COVID-19 Contact Tracer
 
 
-Background
+## Background
 
 COVID-19 is a disease caused by SARS-CoV-2 virus. It emerged in China in late 2019, and in the space of several months it has become a global pandemic. The disease causes respiratory failure in the most critical (approx 4%) cases. 
 
@@ -20,9 +20,11 @@ The app could detect nearby devices or app users that it sees (possibly via Blue
 
 If an app user reports that they have a suspected or confirmed case of COVID19, this would be synchronised with all other devices so that they can be notified if they came in contact with them. The app could then recommend actions based on how close you came, and how long you spent with them.
 
-Open Source Project
+## Open Source Project
+
 We would like to invite app developers from around the world to assist us in the creation of an open source implementation of such an app. 
-Requirements
+
+### Requirements
 
 The ideal app would be:
 
@@ -45,7 +47,7 @@ We have already begun working on a prototype, and are evaluating the following o
 
 We are primarily web app developers, so we are looking for engineers with experience in hardware communication who can help.
 
-Authors
+## Authors
 
-Paul Maunders - UK 
-Carlos Morillo Merino - Spain
+* Paul Maunders - UK 
+* Carlos Morillo Merino - Spain
