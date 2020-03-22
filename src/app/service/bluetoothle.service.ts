@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {DevicesService} from '../service/devices.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
+import {Platform} from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,8 @@ export class BluetoothleService {
 
     constructor(private bluetoothLE: BluetoothLE,
                 private devicesService: DevicesService,
-                private datePipe: DatePipe) {
+                private datePipe: DatePipe,
+                private platform: Platform) {
 
     }
 
@@ -25,17 +27,22 @@ export class BluetoothleService {
             restoreKey: 'bluetoothlecontacttracercentral'
         };
         this.bluetoothLE.initialize(config).subscribe(successInitialize => {
+            console.log('Initialize: ' + JSON.stringify(successInitialize));
             // start the scan of devices BLE
             if (successInitialize.status === 'enabled') {
                 this.startScan();
             } else if (successInitialize.status === 'disabled') {
-                this.bluetoothLE.enable();
-                this.startScan();
+
+                if (this.platform.is('android')) {
+                    this.bluetoothLE.enable();
+                    this.startScan();
+                }
+
+
             }
-        }, (errorRespond) => {
-            console.log('Respond Error: ' + JSON.stringify(errorRespond));
-        })
-    );
+        }, (errorInitialize) => {
+            console.log('Error Initialize: ' + JSON.stringify(errorInitialize));
+        });
     }
 
     initializePeripheral(UUID) {
@@ -277,12 +284,19 @@ export class BluetoothleService {
     }
 
 
-    private delay(ms: number) {
+    private
+
+    delay(ms
+              :
+              number
+    ) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
 
-    private addDevice(device) {
+    private
+
+    addDevice(device) {
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
         const timeString = this.datePipe.transform(dateNow, 'hh:mm:ss');
