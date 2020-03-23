@@ -105,10 +105,12 @@ export class BluetoothleService {
 
         if (this.platform.is('android')) {
             this.delay(10000).then((successTimeout) => {
-               this.manageScanCycle();
+                this.manageScanCycle();
             }, (errorTimeout) => {
                 console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
             });
+        } else if (this.platform.is('ios')) {
+            this.manageScanCycle();
         }
     }
 
