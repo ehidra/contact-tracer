@@ -88,12 +88,12 @@ export class BluetoothleService {
         });
     }
 
-    startAdvertising() {
+    startAdvertising(time = 0) {
+        time++;
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
             name: 'Contact Tracer',
-            mode: 'lowLatency',
             connectable: true,
             powerLevel: 'high'
         };
@@ -104,8 +104,13 @@ export class BluetoothleService {
         });
 
         if (this.platform.is('android')) {
-            this.delay(10000).then((successTimeout) => {
-                this.manageScanCycle();
+            this.delay(2000).then((successTimeout) => {
+                if (time < 6) {
+                    this.startAdvertising(time);
+                } else {
+                    this.manageScanCycle();
+                }
+
             }, (errorTimeout) => {
                 console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
             });
@@ -172,14 +177,16 @@ export class BluetoothleService {
         const params = {
             services: ['1234'],
             allowDuplicates: false,
-            scanMode: this.bluetoothLE.SCAN_MODE_BALANCED,
+            scanMode: this.bluetoothLE.SCAN_MODE_LOW_POWER,
             matchMode: this.bluetoothLE.MATCH_MODE_AGGRESSIVE,
             matchNum: this.bluetoothLE.MATCH_NUM_MAX_ADVERTISEMENT,
             callbackType: this.bluetoothLE.CALLBACK_TYPE_ALL_MATCHES
         };
         this.bluetoothLE.startScan(params).subscribe((successStartScan) => {
-            console.log('startScan: ' + JSON.stringify(successStartScan));
+
             if (successStartScan.status === 'scanResult') {
+                // console.log('startScan: ' + JSON.stringify(successStartScan));
+
                 const paramsConnect = {
                     address: successStartScan.address
                 };
@@ -191,12 +198,9 @@ export class BluetoothleService {
     }
 
     connectToDevice(paramsConnect, numberTries = 0) {
-
-
         if (!this.connectedTries.includes(paramsConnect.address)) {
+            this.connectedTries.push(paramsConnect.address)
             console.log('Trying to connect to: ' + JSON.stringify(paramsConnect));
-            this.connectedTries.push(paramsConnect.address);
-
             this.bluetoothLE.connect(paramsConnect).subscribe((successConnect) => {
                 console.log('connect: ' + JSON.stringify(successConnect));
 
