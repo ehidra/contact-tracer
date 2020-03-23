@@ -132,6 +132,7 @@ Install cocoapods
 Clone the project:
 
 	git clone git@github.com:memiah/contact-tracer.git
+	cd contact-tracer
 
 Run capacitor and other build tools
 
