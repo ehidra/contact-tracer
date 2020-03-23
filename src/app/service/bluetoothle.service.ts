@@ -95,7 +95,7 @@ export class BluetoothleService {
             name: 'Contact Tracer',
             connectable: true,
             mode: 'lowLatency',
-            timeout: 1000,
+            timeout: 10000,
             txPowerLevel: 'high'
         };
         this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
