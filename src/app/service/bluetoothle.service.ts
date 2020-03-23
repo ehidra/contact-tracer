@@ -137,7 +137,7 @@ export class BluetoothleService {
         // Initialise the central service for the bluetoothle
         const config = {
             request: true,
-            statusReceiver: false,
+            statusReceiver: true,
             restoreKey: 'bluetoothlecontacttracercentral'
         };
         console.log(' Initialize params ' + JSON.stringify(config));
