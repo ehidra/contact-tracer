@@ -20,6 +20,9 @@ export class HomePage {
         private platform: Platform,
         private uniqueDeviceID: UniqueDeviceID) {
 
+    }
+
+    ionViewWillEnter() {
         this.platform.ready().then((readySource) => {
             this.uniqueDeviceID.get().then((uuid: any) => {
                 this.myDevice = uuid;
@@ -30,6 +33,11 @@ export class HomePage {
 
             }, (error) => {
                 console.log('error getting UUID: ' + JSON.stringify(error));
+                this.delay(2000).then((successTimeout) => {
+                    this.ionViewWillEnter();
+                }, (errorTimeout) => {
+                    this.ionViewWillEnter();
+                });
             });
         });
     }
@@ -39,20 +47,8 @@ export class HomePage {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    checkIfScanning() {
-        return this.bluetoothleService.isScanning;
-    }
-
     startScan() {
         this.bluetoothleService.startScan();
-    }
-
-    stopScan() {
-        this.bluetoothleService.stopScan();
-    }
-
-    startAdvertisingPeripheral() {
-        this.bluetoothleService.advertisePeripheral();
     }
 
     getAllDevices() {

@@ -21,20 +21,23 @@ export class DevicesService {
 
     create(device: any) {
 
-        this.getDevice(device).then(deviceResult => {
-
-                if (deviceResult.length > 0) {
-                    const dbDevice = deviceResult[0];
-                    device.id = dbDevice.id;
-                    this.update(device);
-                    console.log('updated a device');
-                } else {
-                    const sql = 'INSERT INTO devices(device,device_name, date_found, time_found) VALUES(?,?,?,?)';
-                    this.db.executeSql(sql, [device.device, device.device_name, device.date_found, device.time_found]);
-                    console.log('created a device');
-                }
-            }
-        );
+        const sql = 'INSERT INTO devices(device,device_name, date_found, time_found) VALUES(?,?,?,?)';
+        this.db.executeSql(sql, [device.device, device.device_name, device.date_found, device.time_found]);
+        console.log('created a device-time');
+        // this.getDevice(device).then(deviceResult => {
+        //
+        // if (deviceResult.length > 0) {
+        //                   const dbDevice = deviceResult[0];
+        //                  device.id = dbDevice.id;
+        //                  this.update(device);
+        //                 console.log('updated a device');
+        //             } else {
+        //                const sql = 'INSERT INTO devices(device,device_name, date_found, time_found) VALUES(?,?,?,?)';
+        //                this.db.executeSql(sql, [device.device, device.device_name, device.date_found, device.time_found]);
+        //                console.log('created a device');
+        //           }
+        //        }
+        //     );
     }
 
     createTable() {
