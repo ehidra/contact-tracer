@@ -105,7 +105,7 @@ export class BluetoothleService {
             console.log('Peripheral startAdvertising Error: ' + JSON.stringify(errorStartAdvertising));
         });
 
-        this.delay(20000).then((successTimeout) => {
+        this.delay(15000).then((successTimeout) => {
             console.log('Perfipheral Timeout : ' + JSON.stringify(successTimeout));
             this.bluetoothLE.isAdvertising().then((successIsAdvertising) => {
                 console.log('Peripheral isAdvertising : ' + JSON.stringify(successIsAdvertising));
@@ -113,45 +113,26 @@ export class BluetoothleService {
                 if (successIsAdvertisingObject.isAdvertising === true) {
                     this.bluetoothLE.stopAdvertising().then((successStopAdvertising) => {
                         console.log('Peripheral stopAdvertising: ' + JSON.stringify(successStopAdvertising));
-
-                        // const params = {
-                        //    services: ['1234'], // iOS
-                        //   service: '1234', // Android
-                        // };
-                        //  this.bluetoothLE.removeAllServices().then((successRemoveService) => {
-                        //    console.log('Peripheral removeService: ' + JSON.stringify(successRemoveService));
-                        //    this.startAdvertising();
-                        // }, (errorRemoveService) => {
-                        //    console.log('Peripheral removeService Error: ' + JSON.stringify(errorRemoveService));
-                        //    this.startAdvertising();
-                        // });
-
                         this.startAdvertising();
-
-
                     }, (errorStopAdvertising) => {
                         console.log('Peripheral stopAdvertising Error: ' + JSON.stringify(errorStopAdvertising));
-                        this.startAdvertising();
                     });
                 } else {
                     console.log('Peripheral already stopped');
                     this.startAdvertising();
                 }
-
             }, (errorIsAdvertising) => {
                 console.log('Peripheral isAdvertising Error: ' + JSON.stringify(errorIsAdvertising));
-                this.startAdvertising();
             });
         }, (errorTimeout) => {
             console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
-            this.startAdvertising();
         });
     }
 
     // END PERIPHERAL CODE
     // START CENTRAL CODE
 
-    initializeCentral() {
+    initializeCentral(myDevice) {
 
         // Initialise the central service for the bluetoothle
         const config = {
@@ -165,11 +146,12 @@ export class BluetoothleService {
             // start the scan of devices BLE
             if (successInitialize.status === 'enabled') {
                 this.startScan();
+                this.initializePeripheral(myDevice);
             } else if (successInitialize.status === 'disabled') {
 
                 if (this.platform.is('android')) {
                     this.bluetoothLE.enable();
-                    this.startScan();
+                    this.initializeCentral(myDevice);
                 }
             }
         }, (errorInitialize) => {
@@ -193,16 +175,10 @@ export class BluetoothleService {
         this.bluetoothLE.startScan(params).subscribe((successStartScan) => {
             console.log('startScan: ' + JSON.stringify(successStartScan));
             if (successStartScan.status === 'scanResult') {
-                this.stopScan().then((successStopScan) => {
-
-                    const paramsConnect = {
-                        address: successStartScan.address
-                    };
-                    this.connectToDevice(paramsConnect);
-
-                }, (errorStopScan) => {
-                    console.log('StopScan Error: ' + JSON.stringify(errorStopScan));
-                });
+                const paramsConnect = {
+                    address: successStartScan.address
+                };
+                this.connectToDevice(paramsConnect);
             }
         }, (errorStartScan) => {
             console.log('error Start Scan: ' + JSON.stringify(errorStartScan));
@@ -210,16 +186,9 @@ export class BluetoothleService {
 
 
         this.delay(30000).then((successTimeout) => {
-            this.stopScan().then((successStopScan) => {
-                console.log('StopScan Success Timeout: ' + JSON.stringify(successStopScan));
-                this.startScan();
-            }, (errorStopScan) => {
-                console.log('StopScan Error Timeout: ' + JSON.stringify(errorStopScan));
-                this.startScan();
-            });
+            this.stopScan();
         }, (errorTimeout) => {
             console.log('Scan Timeout Error: ' + JSON.stringify(errorTimeout));
-            this.startScan();
         });
     }
 
@@ -262,20 +231,22 @@ export class BluetoothleService {
                     console.log(' Disconnect error: ' + JSON.stringify(errorDisconnect));
                 });
             });
+
+            this.delay(7000).then((successTimeout) => {
+                const disconnectParams = {
+                    address: paramsConnect.address
+                };
+                this.bluetoothLE.disconnect(disconnectParams).then((successDisconnect) => {
+                    console.log('Disconnect: ' + JSON.stringify(successDisconnect));
+                }, (errorDisconnect) => {
+                    console.log(' Disconnect error: ' + JSON.stringify(errorDisconnect));
+                });
+            }, (errorTimeout) => {
+                console.log('Connect Timeout Error: ' + JSON.stringify(errorTimeout));
+            });
         }
 
-        // this.delay(5000).then((successTimeout) => {
-        //    const disconnectParams = {
-        //        address: paramsConnect.address
-        //    };
-        //    this.bluetoothLE.disconnect(disconnectParams).then((successDisconnect) => {
-        //        console.log('Disconnect: ' + JSON.stringify(successDisconnect));
-        //    }, (errorDisconnect) => {
-        //        console.log(' Disconnect error: ' + JSON.stringify(errorDisconnect));
-        //    });
-        // }, (errorTimeout) => {
-        //    console.log('Connect Timeout Error: ' + JSON.stringify(errorTimeout));
-        // });
+
     }
 
     readUUIDConnectedDevice(addressDevice) {
@@ -311,16 +282,19 @@ export class BluetoothleService {
 
             }, (errorRead) => {
                 console.log(' read error: ' + JSON.stringify(errorRead));
-                this.startScan();
             });
         }, (errorDiscover) => {
             console.log(' discover error: ' + JSON.stringify(errorDiscover));
-            this.startScan();
         });
     }
 
     stopScan() {
-        return this.bluetoothLE.stopScan();
+        this.bluetoothLE.stopScan().then((successStopScan) => {
+            console.log('StopScan Success: ' + JSON.stringify(successStopScan));
+            this.startScan();
+        }, (errorStopScan) => {
+            console.log('StopScan Error: ' + JSON.stringify(errorStopScan));
+        });
     }
 
     // END CENTRAL CODE

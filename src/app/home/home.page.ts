@@ -28,8 +28,7 @@ export class HomePage {
                 this.myDevice = uuid;
                 console.log('Getting UUID: ' + this.myDevice);
 
-                this.bluetoothleService.initializeCentral();
-                this.bluetoothleService.initializePeripheral(this.myDevice);
+                this.bluetoothleService.initializeCentral(this.myDevice);
 
             }, (error) => {
                 console.log('error getting UUID: ' + JSON.stringify(error));
@@ -45,10 +44,6 @@ export class HomePage {
 
     private delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    startScan() {
-        this.bluetoothleService.startScan();
     }
 
     getAllDevices() {
