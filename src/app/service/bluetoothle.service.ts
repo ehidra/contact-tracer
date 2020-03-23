@@ -108,15 +108,29 @@ export class BluetoothleService {
                 if (time < 6) {
                     this.startAdvertising(time);
                 } else {
-                    this.manageScanCycle();
+                    this.stopAdvertising();
                 }
 
             }, (errorTimeout) => {
                 console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
             });
         } else if (this.platform.is('ios')) {
-            this.manageScanCycle();
+            this.delay(10000).then((successTimeout) => {
+                    this.stopAdvertising();
+            }, (errorTimeout) => {
+                console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
+            });
         }
+    }
+
+    stopAdvertising() {
+        this.bluetoothLE.stopAdvertising().then((successstopAdvertising) => {
+            console.log('Peripheral stopAdvertising: ' + JSON.stringify(successstopAdvertising));
+            this.manageScanCycle();
+        }, (errorStopAdvertising) => {
+            console.log('Peripheral stopAdvertising Error: ' + JSON.stringify(errorStopAdvertising));
+            this.manageScanCycle();
+        });
     }
 
     // END PERIPHERAL CODE
