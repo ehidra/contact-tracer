@@ -53,11 +53,6 @@ We have already begun working on a prototype, and are evaluating the following o
 
 We are primarily web app developers, so we are looking for engineers with experience in hardware communication who can help.
 
-## Contributors
-
-* Paul Maunders - UK 
-* Carlos Morillo Merino - Spain
-
 ## The prototype (working for IOS and Android)
 
 At the end we decided to go with the Buetooth LE approach and we have build a prototype.
@@ -73,7 +68,85 @@ At the moment Background mode only work for Android but IOS should be also possi
 * ionic capacitor run android
 * ionic capacitor run ios
 
-
 The whole point of the app is being able to recognise and connect to other devices no matter the platform and exchange 
 UUID's. Then that should prove two people have been in contact. We have still to improve the proccess testing the scans 
 and advertise as peripheral cycles. The results are stored in a in-app SQLite data base.
+
+## Mac development set up ##
+
+### Install Ionic and depencies ###
+
+Following these instructions: https://ionicframework.com/docs/v3/developer-resources/platform-setup/mac-setup.html
+
+Install Homebrew from https://brew.sh/
+
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  
+Install n (Node version manager)
+
+	brew install n
+  
+Update node to latest version
+
+	sudo n latest
+
+Install Xcode from the App Store 
+
+Download Android Studio from https://developer.android.com/studio/ and run the installer.
+After installation, add the “command line tools” from Configure > Android SDK > SDK Tools 
+NOTE: Couldn’t find ‘Android Support Repository’ - Android cli command not found
+
+Install java
+
+	brew install java
+
+Symlink it so that the OSX system Java wrappers can find this JDK, symlink it with
+
+	sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+
+Install Cordova
+
+	sudo npm install -g cordova
+
+Install Ionic 
+
+	sudo npm install -g ionic
+
+### Capacitor dependencies ###
+
+Install Ruby 
+
+	brew install ruby
+	Add to .bash_profile   export PATH=/usr/local/opt/ruby/bin:$PATH
+
+Install Xcode developer tools
+
+	xcode-select --install
+
+Install cocoapods
+
+	sudo gem install cocoapods
+
+### Clone and build the project ###
+
+Clone the project:
+
+	git clone git@github.com:memiah/contact-tracer.git
+
+Run capacitor and other build tools
+
+	ionic capacitor run ios
+
+	npm install
+
+	npx cap sync ios
+
+Open the project in Xcode better
+
+	npx cap open ios
+
+
+## Contributors
+
+* Paul Maunders - Memiah Limited - UK 
+* Carlos Morillo Merino - eHidra - Spain
