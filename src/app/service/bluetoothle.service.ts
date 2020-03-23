@@ -132,9 +132,6 @@ export class BluetoothleService {
 
                 this.initializePeripheral();
                 this.manageScanCycle();
-                if (this.platform.is('ios')) {
-                    this.startAdvertising();
-                }
 
             } else if (successInitialize.status === 'disabled') {
 
