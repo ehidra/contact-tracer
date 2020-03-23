@@ -88,14 +88,15 @@ export class BluetoothleService {
         });
     }
 
-    startAdvertising(time = 0) {
-        time++;
+    startAdvertising() {
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
             name: 'Contact Tracer',
             connectable: true,
-            powerLevel: 'high'
+            mode: 'lowLatency',
+            timeout: 1000,
+            txPowerLevel: 'high'
         };
         this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
             console.log('Peripheral startAdvertising: ' + JSON.stringify(successStartAdvertising));
@@ -103,24 +104,11 @@ export class BluetoothleService {
             console.log('Peripheral startAdvertising Error: ' + JSON.stringify(errorStartAdvertising));
         });
 
-        if (this.platform.is('android')) {
-            this.delay(2000).then((successTimeout) => {
-                if (time < 6) {
-                    this.startAdvertising(time);
-                } else {
-                    this.stopAdvertising();
-                }
-
-            }, (errorTimeout) => {
-                console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
-            });
-        } else if (this.platform.is('ios')) {
-            this.delay(10000).then((successTimeout) => {
-                    this.stopAdvertising();
-            }, (errorTimeout) => {
-                console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
-            });
-        }
+        this.delay(10000).then((successTimeout) => {
+            this.stopAdvertising();
+        }, (errorTimeout) => {
+            console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
+        });
     }
 
     stopAdvertising() {
