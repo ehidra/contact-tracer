@@ -198,7 +198,7 @@ export class BluetoothleService {
 
     connectToDevice(paramsConnect, numberTries = 0) {
         if (!this.connectedTries.includes(paramsConnect.address)) {
-            this.connectedTries.push(paramsConnect.address)
+            this.connectedTries.push(paramsConnect.address);
             console.log('Trying to connect to: ' + JSON.stringify(paramsConnect));
             this.bluetoothLE.connect(paramsConnect).subscribe((successConnect) => {
                 console.log('connect: ' + JSON.stringify(successConnect));
