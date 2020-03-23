@@ -95,7 +95,7 @@ export class BluetoothleService {
             name: 'Contact Tracer',
             connectable: true,
             mode: 'lowLatency',
-            timeout: 10000,
+            timeout: 5000,
             txPowerLevel: 'high'
         };
         this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
@@ -104,7 +104,7 @@ export class BluetoothleService {
             console.log('Peripheral startAdvertising Error: ' + JSON.stringify(errorStartAdvertising));
         });
 
-        this.delay(10000).then((successTimeout) => {
+        this.delay(5000).then((successTimeout) => {
             this.stopAdvertising();
         }, (errorTimeout) => {
             console.log('Perfipheral Timeout Error: ' + JSON.stringify(errorTimeout));
@@ -158,7 +158,7 @@ export class BluetoothleService {
 
     manageScanCycle() {
         this.startScan();
-        this.delay(15000).then((successTimeoutScan) => {
+        this.delay(10000).then((successTimeoutScan) => {
             this.stopScan().then((successStopScan) => {
                 console.log('StopScan Success: ' + JSON.stringify(successStopScan));
                 this.startAdvertising();
