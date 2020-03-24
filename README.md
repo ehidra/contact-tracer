@@ -57,6 +57,8 @@ We are primarily web app developers, so we are looking for engineers with experi
 
 At the end we decided to go with the Buetooth LE approach and we have build a prototype.
 
+![Contact Tracer Prototype on iOS](http://pyrosoft.co.uk/covid-19-graphs/contact-tracer-4-iOS-devices.jpg)
+
 We are using Ionic 4 + Capacitor for it . If you want to have a go this should get you up and running quickly.
 We are relying heavily on this plugin https://github.com/randdusing/cordova-plugin-bluetoothle
 There are some issues we have still to solve but it does work.
