@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {SQLiteObject} from '@ionic-native/sqlite';
-
+import {v4 as uuidv4} from 'uuid';
 @Injectable({
     providedIn: 'root'
 })
@@ -46,6 +46,15 @@ export class DevicesService {
                 const deviceSql = 'CREATE TABLE IF NOT EXISTS devices(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT,rssi INTEGER, date_found DATE, time_found TIME );';
                 this.db.executeSql(deviceSql, []).then((successDeviceSql) => {
                         this.truncate();
+                        this.getUUID().then((sqlResult: any) => {
+                            let uuid = '';
+                            if (sqlResult.rows.length === 0) {
+                                uuid = uuidv4();
+                                this.insertUUID(uuid);
+                            }
+                        }, (error) => {
+                            console.log('error getting UUID: ' + JSON.stringify(error));
+                        });
                     },
                     (errorDeviceSql) => {
 
