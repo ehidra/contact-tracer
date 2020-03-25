@@ -18,6 +18,7 @@ export class HomePage {
         private devicesService: DevicesService,
         private platform: Platform) {
 
+        this.devicesService.createDatabase();
     }
 
     ionViewWillEnter() {
@@ -25,16 +26,21 @@ export class HomePage {
             this.devicesService.getUUID().then((sqlResult: any) => {
                 if (sqlResult.rows.length === 0) {
                     console.log('UUID not in place yet');
-                    this.ionViewWillEnter();
+                    this.delay(2000).then((successTimeout) => {
+                        this.ionViewWillEnter();
+                    }, (errorTimeout) => {
+                        this.ionViewWillEnter();
+                    });
                 } else {
                     for (let index = 0; index < sqlResult.rows.length; index++) {
                         const uuidObject = sqlResult.rows.item(index);
                         this.myDevice = uuidObject.value;
                     }
+                    console.log('Getting UUID: ' + this.myDevice);
+                    this.bluetoothleService.initializeCentral(this.myDevice);
+                    this.getAllDevices();
                 }
-                console.log('Getting UUID: ' + this.myDevice);
-                this.bluetoothleService.initializeCentral(this.myDevice);
-                this.getAllDevices();
+
             }, (error) => {
                 console.log('error getting UUID: ' + JSON.stringify(error));
                 this.delay(2000).then((successTimeout) => {

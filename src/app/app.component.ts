@@ -3,7 +3,6 @@ import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {DevicesService} from './service/devices.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 
@@ -18,7 +17,6 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private backgroundMode: BackgroundMode,
-        private sqlite: SQLite,
         private devicesService: DevicesService,
         private bluetoothLE: BluetoothLE
     ) {
@@ -26,35 +24,18 @@ export class AppComponent {
     }
 
     initializeApp() {
-        this.platform.ready().then(() => {
+        this.platform.ready().then(async () => {
             this.statusBar.styleDefault();
-            this.splashScreen.hide();
-            if (this.platform.is('android')) {
-                this.permission();
-            }
             this.backgroundMode.setDefaults({silent: true});
+            if (this.platform.is('android')) {
+                await this.permission();
+            }
             this.backgroundMode.enable();
-            this.createDatabase();
+            this.splashScreen.hide();
         });
     }
 
-    private createDatabase() {
-        this.sqlite.create({
-            name: 'data.db',
-            location: 'default' // the location field is required
-        })
-            .then((db) => {
-                this.devicesService.setDatabase(db);
-            })
-            .then(() => {
-                // console.log('Data base set up correctly');
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
-    private permission() {
+    permission() {
 
         this.bluetoothLE.hasPermission().then(
             successHasPermission => {

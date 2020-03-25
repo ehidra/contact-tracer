@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {SQLiteObject} from '@ionic-native/sqlite';
+import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {v4 as uuidv4} from 'uuid';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -8,7 +9,23 @@ export class DevicesService {
 
     db: SQLiteObject = null;
 
-    constructor() {
+    constructor(private sqlite: SQLite) {
+    }
+
+    public createDatabase() {
+        this.sqlite.create({
+            name: 'data.db',
+            location: 'default' // the location field is required
+        })
+            .then((db) => {
+                this.setDatabase(db);
+            })
+            .then(() => {
+                // console.log('Data base set up correctly');
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     // public methods
@@ -18,27 +35,6 @@ export class DevicesService {
             this.db = db;
             this.createTable();
         }
-    }
-
-    create(device: any) {
-
-        const sql = 'INSERT INTO devices(uuid, rssi, date_found, time_found) VALUES(?,?,?,?)';
-        this.db.executeSql(sql, [device.uuid, device.rssi, device.date_found, device.time_found]);
-        console.log('created a device-time ' + device.uuid + ' ' + device.rssi + ' ' + device.date_found + ' ' + device.time_found);
-        // this.getDevice(device).then(deviceResult => {
-        //
-        // if (deviceResult.length > 0) {
-        //                   const dbDevice = deviceResult[0];
-        //                  device.id = dbDevice.id;
-        //                  this.update(device);
-        //                 console.log('updated a device');
-        //             } else {
-        //                const sql = 'INSERT INTO devices(device,device_name, date_found, time_found) VALUES(?,?,?,?)';
-        //                this.db.executeSql(sql, [device.device, device.device_name, device.date_found, device.time_found]);
-        //                console.log('created a device');
-        //           }
-        //        }
-        //     );
     }
 
     createTable() {
@@ -65,6 +61,28 @@ export class DevicesService {
 
             });
     }
+
+    create(device: any) {
+
+        const sql = 'INSERT INTO devices(uuid, rssi, date_found, time_found) VALUES(?,?,?,?)';
+        this.db.executeSql(sql, [device.uuid, device.rssi, device.date_found, device.time_found]);
+        console.log('created a device-time ' + device.uuid + ' ' + device.rssi + ' ' + device.date_found + ' ' + device.time_found);
+        // this.getDevice(device).then(deviceResult => {
+        //
+        // if (deviceResult.length > 0) {
+        //                   const dbDevice = deviceResult[0];
+        //                  device.id = dbDevice.id;
+        //                  this.update(device);
+        //                 console.log('updated a device');
+        //             } else {
+        //                const sql = 'INSERT INTO devices(device,device_name, date_found, time_found) VALUES(?,?,?,?)';
+        //                this.db.executeSql(sql, [device.device, device.device_name, device.date_found, device.time_found]);
+        //                console.log('created a device');
+        //           }
+        //        }
+        //     );
+    }
+
 
     delete(device: any) {
         const sql = 'DELETE FROM devices WHERE id=?';
