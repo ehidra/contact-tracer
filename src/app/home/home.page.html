@@ -28,7 +28,9 @@
                     <ion-item *ngFor="let device of this.devices; let even = even" [color]="even? '' : 'light'"
                               lines="none">
                         <ion-label class="ion-text-wrap">
-                            {{device.device}} / {{device.date_found}} :  {{device.time_found}}
+                            UUID: {{device.uuid}} <br>
+                            RSSI: {{device.rssi}}<br>
+                            DATETIME: {{device.date_found}} :  {{device.time_found}}
                         </ion-label>
                     </ion-item>
                 </ion-list>

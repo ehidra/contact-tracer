@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import {BluetoothleService} from '../service/bluetoothle.service';
 import {DevicesService} from '../service/devices.service';
-import {UniqueDeviceID} from '@ionic-native/unique-device-id/ngx';
 
 @Component({
     selector: 'app-home',
@@ -17,19 +16,16 @@ export class HomePage {
     constructor(
         private bluetoothleService: BluetoothleService,
         private devicesService: DevicesService,
-        private platform: Platform,
-        private uniqueDeviceID: UniqueDeviceID) {
+        private platform: Platform) {
 
     }
 
     ionViewWillEnter() {
         this.platform.ready().then((readySource) => {
-            this.uniqueDeviceID.get().then((uuid: any) => {
+            this.devicesService.getUUID().then((uuid: any) => {
                 this.myDevice = uuid;
                 console.log('Getting UUID: ' + this.myDevice);
-
                 this.bluetoothleService.initializeCentral(this.myDevice);
-
             }, (error) => {
                 console.log('error getting UUID: ' + JSON.stringify(error));
                 this.delay(2000).then((successTimeout) => {

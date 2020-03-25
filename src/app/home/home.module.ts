@@ -4,7 +4,6 @@ import {IonicModule} from '@ionic/angular';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {HomePage} from './home.page';
-import {UniqueDeviceID} from '@ionic-native/unique-device-id/ngx';
 
 @NgModule({
     imports: [
@@ -18,7 +17,7 @@ import {UniqueDeviceID} from '@ionic-native/unique-device-id/ngx';
             }
         ])
     ],
-    providers: [UniqueDeviceID],
+    providers: [],
     declarations: [HomePage]
 })
 export class HomePageModule {
