@@ -97,7 +97,7 @@ export class BluetoothleService {
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
-            name: '98765432109876543210',
+            name: uuid,
             mode: 'balanced',
             // timeout: 2000,
             txPowerLevel: 'medium',
@@ -186,16 +186,20 @@ export class BluetoothleService {
 
             if (successStartScan.status === 'scanResult') {
 
-                console.log('scanResult1: ' + JSON.stringify(successStartScan));
-                const advertisement = successStartScan.advertisement as string;
-                console.log('scanResult2: ' + advertisement);
-                const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
-                console.log('scanResult3: ' + byteString);
-                const devideUUid = this.bluetoothLE.bytesToString(byteString).slice(4, 24);
-                console.log('scanResult4: ' + devideUUid);
-                if (!this.connectedTries.includes(devideUUid)) {
-                    this.connectedTries.push(devideUUid);
-                    const device = {uuid: devideUUid, rssi: successStartScan.rssi};
+                let deviceUUid = '';
+                if (this.platform.is('ios')) {
+                    deviceUUid = successStartScan.name;
+                } else if (this.platform.is('android')) {
+                    const advertisement = successStartScan.advertisement as string;
+                    console.log('scanResult2: ' + advertisement);
+                    const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
+                    console.log('scanResult3: ' + byteString);
+                    deviceUUid = this.bluetoothLE.bytesToString(byteString).slice(4, 24);
+                }
+                console.log('scanResult4: ' + deviceUUid);
+                if (!this.connectedTries.includes(deviceUUid)) {
+                    this.connectedTries.push(deviceUUid);
+                    const device = {uuid: deviceUUid, rssi: successStartScan.rssi};
                     this.addDevice(device);
                 }
             }
