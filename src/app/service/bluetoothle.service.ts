@@ -202,18 +202,20 @@ export class BluetoothleService {
                     advertisementDecoded = atob(advertisement);
                 } else {
                     // Android
-                    console.log('scanResult2: ' + advertisementResult);
                     const byteString = this.bluetoothLE.encodedStringToBytes(advertisementResult);
-                    console.log('scanResult3: ' + byteString);
                     advertisementDecoded = this.bluetoothLE.bytesToString(byteString);
                 }
-                console.log('scanResult4: ' + advertisementDecoded);
                 const regex = /[0-9a-fA-F\-]{20}/;
-                const deviceUUid = regex.exec(advertisementDecoded);
-                if (deviceUUid != null && !this.connectedTries.includes(deviceUUid)) {
-                    this.connectedTries.push(deviceUUid);
-                    const device = {uuid: deviceUUid, rssi: successStartScan.rssi};
-                    this.addDevice(device);
+                const deviceUUidArray = regex.exec(advertisementDecoded);
+                if (deviceUUidArray.length) {
+                    const deviceUUid = deviceUUidArray[0];
+                    if (!this.connectedTries.includes(deviceUUid)) {
+                        console.log('connectedTries: ' + JSON.stringify(this.connectedTries));
+                        this.connectedTries.push(deviceUUid);
+                        const device = {uuid: deviceUUid, rssi: successStartScan.rssi};
+                        this.addDevice(device);
+                    }
+
                 }
             }
         }, (errorStartScan) => {
