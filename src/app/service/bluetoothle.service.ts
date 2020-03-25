@@ -59,6 +59,7 @@ export class BluetoothleService {
                 };
                 this.bluetoothLE.addService(characteristics).then((successAddService) => {
                     console.log('Peripheral addService: ' + JSON.stringify(successAddService));
+                    this.manageAdvertisingCycle();
                 }, (errorAddService) => {
                     console.log('Peripheral addService Error: ' + JSON.stringify(errorAddService));
                 });
@@ -89,7 +90,7 @@ export class BluetoothleService {
 
     startAdvertising() {
 
-        const encodedBytes = this.bluetoothLE.stringToBytes(this.myDevice.slice(0,20));
+        const encodedBytes = this.bluetoothLE.stringToBytes(this.myDevice.slice(0, 20));
         const encodedString = this.bluetoothLE.bytesToEncodedString(encodedBytes);
 
         const params = {
@@ -97,7 +98,7 @@ export class BluetoothleService {
             service: '1234', // Android
             name: 'Contact Tracer',
             mode: 'balanced',
-            timeout: 2000,
+            // timeout: 2000,
             txPowerLevel: 'medium',
             connectable: false,
             manufacturerId: 1,
@@ -140,7 +141,6 @@ export class BluetoothleService {
 
                 this.initializePeripheral();
                 this.manageScanCycle();
-                this.manageAdvertisingCycle();
 
             } else if (successInitialize.status === 'disabled') {
 
@@ -187,10 +187,13 @@ export class BluetoothleService {
 
             if (successStartScan.status === 'scanResult') {
 
-                console.log('scanResult: ' + JSON.stringify(successStartScan));
+                console.log('scanResult1: ' + JSON.stringify(successStartScan));
                 const advertisement = successStartScan.advertisement as string;
+                console.log('scanResult2: ' + advertisement);
                 const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
+                console.log('scanResult3: ' + byteString);
                 const devideUUid = this.bluetoothLE.bytesToString(byteString).slice(4, 24);
+                console.log('scanResult4: ' + devideUUid);
                 if (!this.connectedTries.includes(devideUUid)) {
                     this.connectedTries.push(devideUUid);
                     const device = {uuid: devideUUid, rssi: successStartScan.rssi};

@@ -23,32 +23,32 @@ export class HomePage {
 
     ionViewWillEnter() {
         this.platform.ready().then((readySource) => {
-            this.devicesService.getUUID().then((sqlResult: any) => {
-                if (sqlResult.rows.length === 0) {
-                    console.log('UUID not in place yet');
-                    this.delay(2000).then((successTimeout) => {
+            this.delay(2000).then((successTimeout) => {
+                    if (this.devicesService.ready === true) {
+                        this.devicesService.getUUID().then((sqlResult: any) => {
+                            console.log('sql result' + JSON.stringify(sqlResult));
+                            if (sqlResult.rows.length === 0) {
+                                console.log('UUID not in place yet');
+                                this.ionViewWillEnter();
+                            } else {
+                                for (let index = 0; index < sqlResult.rows.length; index++) {
+                                    const uuidObject = sqlResult.rows.item(index);
+                                    this.myDevice = uuidObject.value;
+                                }
+                                console.log('Getting UUID: ' + this.myDevice);
+                                this.bluetoothleService.initializeCentral(this.myDevice);
+                                this.getAllDevices();
+                            }
+                        }, (error) => {
+                            console.log('Error getting UUID: ' + JSON.stringify(error));
+                        });
+                    } else {
                         this.ionViewWillEnter();
-                    }, (errorTimeout) => {
-                        this.ionViewWillEnter();
-                    });
-                } else {
-                    for (let index = 0; index < sqlResult.rows.length; index++) {
-                        const uuidObject = sqlResult.rows.item(index);
-                        this.myDevice = uuidObject.value;
                     }
-                    console.log('Getting UUID: ' + this.myDevice);
-                    this.bluetoothleService.initializeCentral(this.myDevice);
-                    this.getAllDevices();
-                }
-
-            }, (error) => {
-                console.log('error getting UUID: ' + JSON.stringify(error));
-                this.delay(2000).then((successTimeout) => {
-                    this.ionViewWillEnter();
                 }, (errorTimeout) => {
                     this.ionViewWillEnter();
-                });
-            });
+                }
+            );
         });
     }
 

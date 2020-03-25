@@ -8,7 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 export class DevicesService {
 
     db: SQLiteObject = null;
-
+    ready = false;
     constructor(private sqlite: SQLite) {
     }
 
@@ -47,7 +47,9 @@ export class DevicesService {
                             let uuid = '';
                             if (sqlResult.rows.length === 0) {
                                 uuid = uuidv4();
-                                this.insertUUID(uuid);
+                                this.insertUUID(uuid).then((uuidInserted) => this.ready = true);
+                            } else {
+                                this.ready = true;
                             }
                         }, (error) => {
                             console.log('error getting UUID: ' + JSON.stringify(error));
