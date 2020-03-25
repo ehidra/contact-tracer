@@ -104,7 +104,7 @@ export class BluetoothleService {
             connectable: false,
             manufacturerId: 1,
             includeDeviceName: true,
-            manufacturerSpecificData: encodedString
+            // manufacturerSpecificData: encodedString
         };
         this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
             console.log('Peripheral startAdvertising: ' + JSON.stringify(successStartAdvertising));
