@@ -103,7 +103,7 @@ export class BluetoothleService {
             txPowerLevel: 'medium',
             connectable: false,
             manufacturerId: 1,
-            includeDeviceName: false,
+            includeDeviceName: true,
             manufacturerSpecificData: encodedString
         };
         this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
