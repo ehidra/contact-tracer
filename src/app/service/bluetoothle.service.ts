@@ -90,7 +90,7 @@ export class BluetoothleService {
 
     startAdvertising() {
 
-        let uuid = this.myDevice.slice(0, 9);
+        let uuid = this.myDevice.slice(0, 19);
         if (this.platform.is('ios')) {
             uuid = 'i' + uuid;
         } else if (this.platform.is('android')) {
@@ -197,7 +197,7 @@ export class BluetoothleService {
                 console.log('scanResult3: ' + byteString);
                 const advertisementDecoded = this.bluetoothLE.bytesToString(byteString);
                 console.log('scanResult4: ' + advertisementDecoded);
-                const regex = /[i|a]\d{9}/gi;
+                const regex = /[i|a]\d{19}/gi;
                 const deviceUUid = regex.exec(advertisementDecoded);
                 if (deviceUUid != null && !this.connectedTries.includes(deviceUUid)) {
                     this.connectedTries.push(deviceUUid);
