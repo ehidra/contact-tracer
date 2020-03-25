@@ -1,5 +1,5 @@
 {
-  "appId": "memiah.app.contacttracer",
+  "appId": "memiah.app.contact-tracer",
   "appName": "contact-tracer",
   "bundledWebRuntime": false,
   "npmClient": "npm",
