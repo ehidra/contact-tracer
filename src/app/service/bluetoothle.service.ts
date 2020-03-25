@@ -179,7 +179,7 @@ export class BluetoothleService {
             services: ['1234'],
             allowDuplicates: false,
             scanMode: this.bluetoothLE.SCAN_MODE_LOW_POWER,
-            matchMode: this.bluetoothLE.MATCH_MODE_AGGRESSIVE,
+            matchMode: this.bluetoothLE.MATCH_MODE_STICKY,
             matchNum: this.bluetoothLE.MATCH_NUM_MAX_ADVERTISEMENT,
             callbackType: this.bluetoothLE.CALLBACK_TYPE_ALL_MATCHES
         };

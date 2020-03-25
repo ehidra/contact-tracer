@@ -24,7 +24,7 @@ export class DevicesService {
 
         const sql = 'INSERT INTO devices(uuid, rssi, date_found, time_found) VALUES(?,?,?,?)';
         this.db.executeSql(sql, [device.uuid, device.rssi, device.date_found, device.time_found]);
-        console.log('created a device-time ' + sql);
+        console.log('created a device-time ' + device.uuid + ' ' + device.rssi + ' ' + device.date_found + ' ' + device.time_found);
         // this.getDevice(device).then(deviceResult => {
         //
         // if (deviceResult.length > 0) {
