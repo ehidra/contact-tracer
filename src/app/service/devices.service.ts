@@ -16,6 +16,7 @@ export class DevicesService {
     setDatabase(db: SQLiteObject) {
         if (this.db === null) {
             this.db = db;
+            this.createTable();
         }
     }
 

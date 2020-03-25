@@ -45,7 +45,6 @@ export class AppComponent {
         })
             .then((db) => {
                 this.devicesService.setDatabase(db);
-                this.devicesService.createTable();
             })
             .then(() => {
                 // console.log('Data base set up correctly');
