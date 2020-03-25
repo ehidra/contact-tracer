@@ -194,11 +194,19 @@ export class BluetoothleService {
 
             if (successStartScan.status === 'scanResult') {
                 console.log('scanResult: ' + JSON.stringify(successStartScan));
-                const advertisement = successStartScan.advertisement as string;
-                console.log('scanResult2: ' + advertisement);
-                const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
-                console.log('scanResult3: ' + byteString);
-                const advertisementDecoded = this.bluetoothLE.bytesToString(byteString);
+                let advertisementDecoded = '';
+                const advertisementResult = successStartScan.advertisement;
+                if (typeof advertisementResult !== 'string') {
+                    // IOS
+                    const advertisement = advertisementResult.manufacturerData;
+                    advertisementDecoded = atob(advertisement);
+                } else {
+                    // Android
+                    console.log('scanResult2: ' + advertisementResult);
+                    const byteString = this.bluetoothLE.encodedStringToBytes(advertisementResult);
+                    console.log('scanResult3: ' + byteString);
+                    advertisementDecoded = this.bluetoothLE.bytesToString(byteString);
+                }
                 console.log('scanResult4: ' + advertisementDecoded);
                 const regex = /[0-9a-fA-F\-]{20}/;
                 const deviceUUid = regex.exec(advertisementDecoded);
