@@ -70,7 +70,7 @@ export class DevicesService {
     }
 
     getAll() {
-        const sql = 'SELECT * FROM devices';
+        const sql = 'SELECT * FROM devices ORDER BY date_found, time_found DESC';
         return this.db.executeSql(sql, [])
             .then(response => {
                 const devices = [];

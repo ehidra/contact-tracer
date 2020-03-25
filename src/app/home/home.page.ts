@@ -26,6 +26,7 @@ export class HomePage {
                 this.myDevice = uuid;
                 console.log('Getting UUID: ' + this.myDevice);
                 this.bluetoothleService.initializeCentral(this.myDevice);
+                this.getAllDevices();
             }, (error) => {
                 console.log('error getting UUID: ' + JSON.stringify(error));
                 this.delay(2000).then((successTimeout) => {
@@ -43,14 +44,19 @@ export class HomePage {
     }
 
     getAllDevices() {
-        this.devicesService.getAll().then(deviceList => {
-            this.devices = deviceList;
-        });
+
+        setInterval(() => {
+            this.devicesService.getAll().then(deviceList => {
+                this.devices = deviceList;
+            });
+            console.log('device list updated');
+        }, 5000);
+
+
     }
 
     cleanDevices() {
         this.devicesService.truncate();
-        this.getAllDevices();
     }
 
 }
