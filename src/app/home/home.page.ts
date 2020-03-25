@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import {BluetoothleService} from '../service/bluetoothle.service';
 import {DevicesService} from '../service/devices.service';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
     selector: 'app-home',
@@ -22,9 +23,17 @@ export class HomePage {
 
     ionViewWillEnter() {
         this.platform.ready().then((readySource) => {
-
-
-            this.devicesService.getUUID().then((uuid: any) => {
+            this.devicesService.getUUID().then((sqlResult: any) => {
+                let uuid = '';
+                if (sqlResult.rows.length === 0) {
+                    uuid = uuidv4();
+                    this.devicesService.insertUUID(uuid);
+                } else {
+                    for (let index = 0; index < sqlResult.rows.length; index++) {
+                        const uuidObject = sqlResult.rows.item(index);
+                        uuid = uuidObject.value;
+                    }
+                }
                 this.myDevice = uuid;
                 console.log('Getting UUID: ' + this.myDevice);
                 this.bluetoothleService.initializeCentral(this.myDevice);

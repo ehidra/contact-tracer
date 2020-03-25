@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {SQLiteObject} from '@ionic-native/sqlite';
-import {v4 as uuidv4} from 'uuid';
 
 @Injectable({
     providedIn: 'root'
@@ -108,28 +107,12 @@ export class DevicesService {
 
     getUUID() {
         const sql = 'SELECT * FROM settings WHERE name = \'uuid\'';
-        return this.db.executeSql(sql, []).then(response => {
-            console.log('uuid: ' + JSON.stringify(response));
-            let uuid = null;
-            if (response.rows.length === 0) {
-                uuid = uuidv4();
-                const uuidSql = 'INSERT INTO settings(name, value) VALUES(?,?)';
-                return this.db.executeSql(uuidSql, ['uuid', uuid]).then(
-                    (successInsert) => {
-                        return Promise.resolve(uuid);
-                    }, (errorInsert) => {
-                        return Promise.resolve(errorInsert);
-                    });
-            } else {
-                for (let index = 0; index < response.rows.length; index++) {
-                    const uuidObject = response.rows.item(index);
-                    uuid = uuidObject.value;
-                }
-                return Promise.resolve(uuid);
-            }
-        }).catch(error => {
-            return Promise.reject(error);
-        });
+        return this.db.executeSql(sql, []);
+    }
+
+    insertUUID(uuid) {
+        const uuidSql = 'INSERT INTO settings(name, value) VALUES(?,?)';
+        return this.db.executeSql(uuidSql, ['uuid', uuid]);
     }
 
 
