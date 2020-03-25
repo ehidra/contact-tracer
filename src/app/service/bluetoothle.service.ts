@@ -185,15 +185,15 @@ export class BluetoothleService {
         this.bluetoothLE.startScan(params).subscribe((successStartScan) => {
 
             if (successStartScan.status === 'scanResult') {
-
+                console.log('scanResult: ' + JSON.stringify(successStartScan));
                 let deviceUUid = '';
                 if (this.platform.is('ios')) {
                     deviceUUid = successStartScan.name;
                 } else if (this.platform.is('android')) {
                     const advertisement = successStartScan.advertisement as string;
-                    console.log('scanResult2: ' + advertisement);
+                    // console.log('scanResult2: ' + advertisement);
                     const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
-                    console.log('scanResult3: ' + byteString);
+                    // console.log('scanResult3: ' + byteString);
                     deviceUUid = this.bluetoothLE.bytesToString(byteString).slice(4, 24);
                 }
                 console.log('scanResult4: ' + deviceUUid);
