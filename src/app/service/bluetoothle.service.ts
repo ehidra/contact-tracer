@@ -78,13 +78,11 @@ export class BluetoothleService {
     manageAdvertisingCycle() {
 
         this.startAdvertising();
-        if (this.platform.is('android')) {
-            this.delay(4000).then((successTimeoutAdvertising) => {
-                this.stopAdvertising();
-            }, (errorTimeoutAdvertising) => {
-                console.log('Scan Timeout Advertising: ' + JSON.stringify(errorTimeoutAdvertising));
-            });
-        }
+        this.delay(4000).then((successTimeoutAdvertising) => {
+            this.stopAdvertising();
+        }, (errorTimeoutAdvertising) => {
+            console.log('Scan Timeout Advertising: ' + JSON.stringify(errorTimeoutAdvertising));
+        });
 
     }
 
@@ -116,7 +114,17 @@ export class BluetoothleService {
     stopAdvertising() {
         this.bluetoothLE.stopAdvertising().then((successstopAdvertising) => {
             console.log('Peripheral stopAdvertising: ' + JSON.stringify(successstopAdvertising));
-            this.manageAdvertisingCycle();
+            if (this.platform.is('ios')) {
+                this.delay(4000).then((successTimeoutAdvertising) => {
+                    this.manageAdvertisingCycle();
+                }, (errorTimeoutAdvertising) => {
+                    console.log('Scan Timeout Advertising: ' + JSON.stringify(errorTimeoutAdvertising));
+                    this.manageAdvertisingCycle();
+                });
+            } else if (this.platform.is('android')) {
+                this.manageAdvertisingCycle();
+            }
+
         }, (errorStopAdvertising) => {
             console.log('Peripheral stopAdvertising Error: ' + JSON.stringify(errorStopAdvertising));
         });
