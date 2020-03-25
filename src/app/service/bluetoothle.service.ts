@@ -90,13 +90,14 @@ export class BluetoothleService {
 
     startAdvertising() {
 
-        const encodedBytes = this.bluetoothLE.stringToBytes(this.myDevice.slice(0, 20));
+        const uuid = this.myDevice.slice(0, 20);
+        const encodedBytes = this.bluetoothLE.stringToBytes(uuid);
         const encodedString = this.bluetoothLE.bytesToEncodedString(encodedBytes);
 
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
-            name: 'Contact Tracer',
+            name: uuid,
             mode: 'balanced',
             // timeout: 2000,
             txPowerLevel: 'medium',
@@ -138,10 +139,8 @@ export class BluetoothleService {
             console.log('Initialize: ' + JSON.stringify(successInitialize));
             // start the scan of devices BLE
             if (successInitialize.status === 'enabled') {
-
                 this.initializePeripheral();
                 this.manageScanCycle();
-
             } else if (successInitialize.status === 'disabled') {
 
                 if (this.platform.is('android')) {
