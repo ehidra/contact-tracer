@@ -22,6 +22,8 @@ export class HomePage {
 
     ionViewWillEnter() {
         this.platform.ready().then((readySource) => {
+
+
             this.devicesService.getUUID().then((uuid: any) => {
                 this.myDevice = uuid;
                 console.log('Getting UUID: ' + this.myDevice);

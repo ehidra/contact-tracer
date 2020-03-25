@@ -77,9 +77,11 @@ export class DevicesService {
                 for (let index = 0; index < response.rows.length; index++) {
                     devices.push(response.rows.item(index));
                 }
-                Promise.resolve(devices);
+                return Promise.resolve(devices);
             })
-            .catch(error => Promise.reject(error));
+            .catch(error => {
+                return Promise.reject(error);
+            });
     }
 
     getDevice(device) {
@@ -92,9 +94,11 @@ export class DevicesService {
                 for (let index = 0; index < response.rows.length; index++) {
                     devices.push(response.rows.item(index));
                 }
-                Promise.resolve(devices);
+                return Promise.resolve(devices);
             })
-            .catch(error => Promise.reject(error));
+            .catch((error) => {
+                return Promise.reject(error);
+            });
     }
 
     update(device: any) {
@@ -104,25 +108,28 @@ export class DevicesService {
 
     getUUID() {
         const sql = 'SELECT * FROM settings WHERE name = \'uuid\'';
-        return this.db.executeSql(sql, [])
-            .then(response => {
-                console.log('uuid: ' + JSON.stringify(response));
-                let uuid = null;
-                if (response.rows.length === 0) {
-                    uuid = uuidv4();
-                    const uuidSql = 'INSERT INTO settings(name, value) VALUES(?,?)';
-                    this.db.executeSql(uuidSql, ['uuid', uuid]);
-                } else {
-                    for (let index = 0; index < response.rows.length; index++) {
-                        const uuidObject = response.rows.item(index);
-                        uuid = uuidObject.value;
-                    }
+        return this.db.executeSql(sql, []).then(response => {
+            console.log('uuid: ' + JSON.stringify(response));
+            let uuid = null;
+            if (response.rows.length === 0) {
+                uuid = uuidv4();
+                const uuidSql = 'INSERT INTO settings(name, value) VALUES(?,?)';
+                return this.db.executeSql(uuidSql, ['uuid', uuid]).then(
+                    (successInsert) => {
+                        return Promise.resolve(uuid);
+                    }, (errorInsert) => {
+                        return Promise.resolve(errorInsert);
+                    });
+            } else {
+                for (let index = 0; index < response.rows.length; index++) {
+                    const uuidObject = response.rows.item(index);
+                    uuid = uuidObject.value;
                 }
-                Promise.resolve(uuid);
-            })
-            .catch(error => {
-                Promise.reject(error);
-            });
+                return Promise.resolve(uuid);
+            }
+        }).catch(error => {
+            return Promise.reject(error);
+        });
     }
 
 
