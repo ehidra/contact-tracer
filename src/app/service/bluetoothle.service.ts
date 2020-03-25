@@ -97,7 +97,7 @@ export class BluetoothleService {
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
-            name: '9876543210987654',
+            name: '9876543210',
             mode: 'balanced',
             // timeout: 2000,
             txPowerLevel: 'medium',
