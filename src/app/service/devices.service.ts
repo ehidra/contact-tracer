@@ -77,7 +77,7 @@ export class DevicesService {
                 for (let index = 0; index < response.rows.length; index++) {
                     devices.push(response.rows.item(index));
                 }
-                return Promise.resolve(devices);
+                Promise.resolve(devices);
             })
             .catch(error => Promise.reject(error));
     }
@@ -92,7 +92,7 @@ export class DevicesService {
                 for (let index = 0; index < response.rows.length; index++) {
                     devices.push(response.rows.item(index));
                 }
-                return Promise.resolve(devices);
+                Promise.resolve(devices);
             })
             .catch(error => Promise.reject(error));
     }
@@ -118,7 +118,7 @@ export class DevicesService {
                         uuid = uuidObject.value;
                     }
                 }
-                return Promise.resolve(uuid);
+                Promise.resolve(uuid);
             })
             .catch(error => {
                 Promise.reject(error);
