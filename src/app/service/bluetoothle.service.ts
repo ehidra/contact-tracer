@@ -90,21 +90,21 @@ export class BluetoothleService {
 
     startAdvertising() {
 
-        const uuid = this.myDevice.slice(0, 20);
+        const uuid = this.myDevice.slice(0, 10);
         const encodedBytes = this.bluetoothLE.stringToBytes(uuid);
         const encodedString = this.bluetoothLE.bytesToEncodedString(encodedBytes);
 
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
-            name: this.myDevice,
+            name: 'Contact Tracer',
             mode: 'balanced',
             // timeout: 2000,
             txPowerLevel: 'medium',
             connectable: false,
             manufacturerId: 1,
-            includeDeviceName: true,
-            // manufacturerSpecificData: encodedString
+            includeDeviceName: false,
+            manufacturerSpecificData: encodedString
         };
         this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
             console.log('Peripheral startAdvertising: ' + JSON.stringify(successStartAdvertising));
