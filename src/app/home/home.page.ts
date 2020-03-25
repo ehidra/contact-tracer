@@ -24,6 +24,7 @@ export class HomePage {
     ionViewWillEnter() {
         this.platform.ready().then((readySource) => {
             this.devicesService.getUUID().then((sqlResult: any) => {
+                console.log('sqll: ' + JSON.stringify(sqlResult));
                 let uuid = '';
                 if (sqlResult.rows.length === 0) {
                     uuid = uuidv4();
