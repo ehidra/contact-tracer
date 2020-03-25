@@ -45,6 +45,7 @@ export class HomePage {
 
     getAllDevices() {
 
+
         setInterval(() => {
             this.devicesService.getAll().then(deviceList => {
                 this.devices = deviceList;
