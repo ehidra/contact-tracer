@@ -97,7 +97,7 @@ export class BluetoothleService {
         const params = {
             services: ['1234'], // iOS
             service: '1234', // Android
-            name: uuid,
+            name: this.myDevice,
             mode: 'balanced',
             // timeout: 2000,
             txPowerLevel: 'medium',
@@ -187,16 +187,15 @@ export class BluetoothleService {
             if (successStartScan.status === 'scanResult') {
                 console.log('scanResult: ' + JSON.stringify(successStartScan));
                 let deviceUUid = '';
-                if (this.platform.is('ios')) {
-                    deviceUUid = successStartScan.name;
-                } else if (this.platform.is('android')) {
-                    const advertisement = successStartScan.advertisement as string;
-                    // console.log('scanResult2: ' + advertisement);
-                    const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
-                    // console.log('scanResult3: ' + byteString);
-                    deviceUUid = this.bluetoothLE.bytesToString(byteString).slice(4, 24);
-                }
-                console.log('scanResult4: ' + deviceUUid);
+                deviceUUid = successStartScan.name;
+                // if (this.platform.is('ios')) {
+                // } else if (this.platform.is('android')) {
+                //    const advertisement = successStartScan.advertisement as string;
+                // console.log('scanResult2: ' + advertisement);
+                //   const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
+                // console.log('scanResult3: ' + byteString);
+                //   deviceUUid = this.bluetoothLE.bytesToString(byteString).slice(4, 24);
+                // }
                 if (!this.connectedTries.includes(deviceUUid)) {
                     this.connectedTries.push(deviceUUid);
                     const device = {uuid: deviceUUid, rssi: successStartScan.rssi};
