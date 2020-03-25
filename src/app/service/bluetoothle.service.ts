@@ -196,6 +196,7 @@ export class BluetoothleService {
                 const byteString = this.bluetoothLE.encodedStringToBytes(advertisement);
                 console.log('scanResult3: ' + byteString);
                 const advertisementDecoded = this.bluetoothLE.bytesToString(byteString);
+                console.log('scanResult4: ' + advertisementDecoded);
                 const regex = /[i|a]\d{9}/gi;
                 const deviceUUid = regex.exec(advertisementDecoded);
                 if (deviceUUid != null && !this.connectedTries.includes(deviceUUid)) {
