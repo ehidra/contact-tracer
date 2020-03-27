@@ -1,9 +1,39 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>signup</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>signup</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-grid *ngIf="this.submitAttempt == false">
+        <form [formGroup]="signupForm">
+
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <ion-item>
+                        <ion-input formControlName="phone" type="phone" placeholder="Phone (+34XXXXXXXXX)">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item *ngIf=" !signupForm.controls.phone.valid &&
+                                               (signupForm.controls.phone.dirty || submitAttempt)"
+                              [class.invalid]="!signupForm.controls.phone.valid
+                                               && (signupForm.controls.phone.dirty || submitAttempt)"
+                              lines="none">
+                        <p class="pyc_error">Phone is not valid.</p>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <div>
+                        <ion-button (click)="validatePhone()" expand="block"><b>Sing Up</b>
+                        </ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </form>
+    </ion-grid>
 
 </ion-content>
+

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NavController} from '@ionic/angular';
-import {cfaSignIn} from 'capacitor-firebase-auth';
+import {cfaSignIn, cfaSignInPhoneOnCodeSent, cfaSignInPhoneOnCodeReceived} from 'capacitor-firebase-auth';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -18,26 +18,52 @@ export class SignupPage implements OnInit {
         private navController: NavController,
     ) {
         this.signupForm = formBuilder.group({
-            phone: ['', Validators.compose([Validators.required])]
+            phone: ['+34647173288', Validators.compose([Validators.required])]
         });
+
+
     }
 
     ngOnInit() {
+
+
     }
 
-    validatePhone(phone) {
+    validatePhone() {
 
         this.submitAttempt = true;
         if (this.signupForm.valid) {
             const newUser = {
                 phone: this.signupForm.value.phone
             };
-            cfaSignIn('phone', {phone}).subscribe(
-                (user) => {
-                    console.log(user.phoneNumber);
+            console.log('Sending Phone Number' + newUser.phone);
+            cfaSignIn('phone', {phone: newUser.phone}).subscribe(
+                (caSignIn) => {
+                    console.log(caSignIn.phoneNumber);
+                }, (errorCfaSignIn) => {
+                    console.log('Error Signing in phone UUID: ' + JSON.stringify(errorCfaSignIn));
+                }
+            );
+
+            // Android and iOS
+            cfaSignInPhoneOnCodeSent().subscribe(
+                (verificationId) => {
+                    console.log(JSON.stringify(verificationId));
+                },
+                (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            );
+
+            // Android Only
+            cfaSignInPhoneOnCodeReceived().subscribe(
+                (event: { verificationId: string, verificationCode: string }) => {
+                    console.log(`${event.verificationId}:${event.verificationCode}`);
+                },
+                (error) => {
+                    console.log(JSON.stringify(error));
                 }
             );
         }
-
     }
 }
