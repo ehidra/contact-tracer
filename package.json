@@ -29,6 +29,7 @@
     "@ionic-native/sqlite": "^5.22.0",
     "@ionic-native/status-bar": "^5.22.0",
     "@ionic/angular": "^5.0.5",
+    "capacitor-firebase-auth": "^0.3.0",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-bluetoothle": "^4.5.9",
     "cordova-plugin-device": "^2.0.3",
