@@ -1,1 +1,27 @@
-{}
+{
+  "appId": "com.memiah.contact.tracer",
+  "appName": "contact-tracer",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {},
+  "linuxAndroidStudioPath": "/home/carlos/android-studio/bin/studio.sh",
+  "plugins": {
+    "CapacitorFirebaseAuth": {
+      "providers": [
+        "google.com",
+        "twitter.com",
+        "facebook.com",
+        "phone"
+      ],
+      "languageCode": "en",
+      "nativeAuth": false,
+      "permissions": {
+        "google": [
+          "profile",
+          "https://www.googleapis.com/auth/drive"
+        ]
+      }
+    }
+  }
+}
