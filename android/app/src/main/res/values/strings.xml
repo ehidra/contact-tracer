@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">contact-tracer</string>
     <string name="title_activity_main">contact-tracer</string>
-    <string name="package_name">memiah.app.contacttracer</string>
-    <string name="custom_url_scheme">memiah.app.contacttracer</string>
+    <string name="package_name">com.memiah.contact.tracer</string>
+    <string name="custom_url_scheme">com.memiah.contact.tracer</string>
 </resources>
