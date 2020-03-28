@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
-import {v4 as uuidv4} from 'uuid';
 
 @Injectable({
     providedIn: 'root'
 })
-export class DevicesService {
+export class DatabaseService {
 
     db: SQLiteObject = null;
     ready = false;
+
     constructor(private sqlite: SQLite) {
     }
 
@@ -43,46 +43,18 @@ export class DevicesService {
                 const deviceSql = 'CREATE TABLE IF NOT EXISTS devices(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT,rssi INTEGER, date_found DATE, time_found TIME );';
                 this.db.executeSql(deviceSql, []).then((successDeviceSql) => {
                         this.truncate();
-                        this.getUUID().then((sqlResult: any) => {
-                            let uuid = '';
-                            if (sqlResult.rows.length === 0) {
-                                uuid = uuidv4();
-                                this.insertUUID(uuid).then((uuidInserted) => this.ready = true);
-                            } else {
-                                this.ready = true;
-                            }
-                        }, (error) => {
-                            console.log('error getting UUID: ' + JSON.stringify(error));
-                        });
                     },
                     (errorDeviceSql) => {
-
                     });
             },
             (errorSettingSql) => {
-
             });
     }
 
     create(device: any) {
-
         const sql = 'INSERT INTO devices(uuid, rssi, date_found, time_found) VALUES(?,?,?,?)';
         this.db.executeSql(sql, [device.uuid, device.rssi, device.date_found, device.time_found]);
         console.log('created a device-time ' + device.uuid + ' ' + device.rssi + ' ' + device.date_found + ' ' + device.time_found);
-        // this.getDevice(device).then(deviceResult => {
-        //
-        // if (deviceResult.length > 0) {
-        //                   const dbDevice = deviceResult[0];
-        //                  device.id = dbDevice.id;
-        //                  this.update(device);
-        //                 console.log('updated a device');
-        //             } else {
-        //                const sql = 'INSERT INTO devices(device,device_name, date_found, time_found) VALUES(?,?,?,?)';
-        //                this.db.executeSql(sql, [device.device, device.device_name, device.date_found, device.time_found]);
-        //                console.log('created a device');
-        //           }
-        //        }
-        //     );
     }
 
 
@@ -92,8 +64,6 @@ export class DevicesService {
     }
 
     truncate() {
-        // const settingsSql = 'DELETE FROM settings';
-        // this.db.executeSql(settingsSql, []);
         const sql = 'DELETE FROM devices';
         return this.db.executeSql(sql, []);
     }
@@ -145,5 +115,14 @@ export class DevicesService {
         return this.db.executeSql(uuidSql, ['uuid', uuid]);
     }
 
+    insertPublicKey(publicKey) {
+        const pkSql = 'INSERT INTO settings(name, value) VALUES(?,?)';
+        return this.db.executeSql(pkSql, ['public_key', publicKey]);
+    }
+
+    getPublicKey() {
+        const sql = 'SELECT * FROM settings WHERE name = \'public_key\'';
+        return this.db.executeSql(sql, []);
+    }
 
 }

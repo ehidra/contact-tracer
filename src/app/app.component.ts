@@ -3,8 +3,8 @@ import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-import {DevicesService} from './service/devices.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
+import {DatabaseService} from './service/database.service';
 
 @Component({
     selector: 'app-root',
@@ -17,8 +17,8 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private backgroundMode: BackgroundMode,
-        private devicesService: DevicesService,
-        private bluetoothLE: BluetoothLE
+        private bluetoothLE: BluetoothLE,
+        private databaseService: DatabaseService
     ) {
         this.initializeApp();
     }
@@ -30,6 +30,7 @@ export class AppComponent {
             if (this.platform.is('android')) {
                 await this.permission();
             }
+            await this.databaseService.createDatabase();
             this.backgroundMode.enable();
             this.splashScreen.hide();
         });

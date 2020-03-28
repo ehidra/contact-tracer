@@ -36,6 +36,8 @@
     "cordova-support-google-services": "^1.4.0",
     "core-js": "^2.5.4",
     "firebase": "^7.13.0",
+    "jsencrypt": "^3.0.0-rc.1",
+    "keypair": "^1.0.1",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "uuid": "^7.0.2",
@@ -66,5 +68,5 @@
     "tslint": "~5.15.0",
     "typescript": "~3.4.3"
   },
-  "description": "An Ionic project"
+  "description": "Contact Tracer project"
 }

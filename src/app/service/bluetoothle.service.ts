@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {DevicesService} from '../service/devices.service';
+import {DatabaseService} from '../service/database.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {Platform} from '@ionic/angular';
 
@@ -13,7 +13,7 @@ export class BluetoothleService {
     private myDevice = null;
 
     constructor(private bluetoothLE: BluetoothLE,
-                private devicesService: DevicesService,
+                private databaseService: DatabaseService,
                 private datePipe: DatePipe,
                 private platform: Platform) {
 
@@ -236,10 +236,13 @@ export class BluetoothleService {
 
 
     private addDevice(device) {
+
+        // import Encrypt from 'jsencrypt';
+        // const encrypt = new Encrypt.JSEncrypt();
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
         const timeString = this.datePipe.transform(dateNow, 'hh:mm:ss');
-        this.devicesService.create({
+        this.databaseService.create({
             uuid: device.uuid,
             rssi: device.rssi,
             date_found: dateString,
