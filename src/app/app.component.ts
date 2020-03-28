@@ -5,7 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {DatabaseService} from './service/database.service';
-
+import {AuthService} from './service/auth.service';
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -18,7 +18,8 @@ export class AppComponent {
         private statusBar: StatusBar,
         private backgroundMode: BackgroundMode,
         private bluetoothLE: BluetoothLE,
-        private databaseService: DatabaseService
+        private databaseService: DatabaseService,
+        private authService: AuthService
     ) {
         this.initializeApp();
     }
@@ -31,9 +32,26 @@ export class AppComponent {
                 this.permission();
             }
             this.databaseService.createDatabase();
+            this.blockUntilDbReady();
             this.backgroundMode.enable();
             this.splashScreen.hide();
         });
+    }
+
+    blockUntilDbReady() {
+        if (this.databaseService.ready === false) {
+            this.delay(1000).then((successTimeoutScan) => {
+                this.blockUntilDbReady();
+            }, (errorTimeoutScan) => {
+                console.log('DB block until ready Timeout Error: ' + JSON.stringify(errorTimeoutScan));
+            });
+        } else {
+            this.authService.connect();
+        }
+    }
+
+    private delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     permission() {

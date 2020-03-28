@@ -208,7 +208,7 @@ export class BluetoothleService {
                     const byteString = this.bluetoothLE.encodedStringToBytes(advertisementResult);
                     advertisementDecoded = this.bluetoothLE.bytesToString(byteString);
                 }
-                const regex = /[0-9a-fA-F\-]{20}/;
+                const regex = /[0-9a-zA-Z\-]{20}/;
                 const deviceUUidArray = regex.exec(advertisementDecoded);
                 if (deviceUUidArray.length) {
                     const deviceUUid = deviceUUidArray[0];
@@ -239,14 +239,14 @@ export class BluetoothleService {
 
 
     private addDevice(device) {
-        const encrypt = new Encrypt.JSEncrypt();
-        encrypt.setPublicKey(this.authService.publicKey);
-        const encryptedString = encrypt.encrypt(device.uuid);
+        // const encrypt = new Encrypt.JSEncrypt();
+        // encrypt.setPublicKey(this.authService.publicKey);
+        // const encryptedString = encrypt.encrypt(device.uuid);
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
-        const timeString = this.datePipe.transform(dateNow, 'hh:mm:ss');
+        const timeString = this.datePipe.transform(dateNow, 'HH:mm:ss');
         this.databaseService.create({
-            uuid: encryptedString,
+            uuid: device.uuid,
             rssi: device.rssi,
             date_found: dateString,
             time_found: timeString

@@ -20,6 +20,10 @@ export class AuthService {
         private databaseService: DatabaseService,
         private navCtrl: NavController
     ) {
+
+    }
+
+    connect() {
         this.firebaseAuthentication.onAuthStateChanged().subscribe((successOnAuthStateChange) => {
                 console.log('successOnAuthStateChange: ' + JSON.stringify(successOnAuthStateChange));
                 if (successOnAuthStateChange !== '' && successOnAuthStateChange.uid) {

@@ -42,10 +42,11 @@ export class DatabaseService {
         this.db.executeSql(settingSql, []).then((successSettingSql) => {
                 const deviceSql = 'CREATE TABLE IF NOT EXISTS devices(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT,rssi INTEGER, date_found DATE, time_found TIME );';
                 this.db.executeSql(deviceSql, []).then((successDeviceSql) => {
-                        this.truncate().then((successTruncate) => {
-                            this.ready = true;
-                        }, (errorTruncate) => {
-                        });
+                        // this.truncate().then((successTruncate) => {
+                        //     this.ready = true;
+                        // }, (errorTruncate) => {
+                        // });
+                        this.ready = true;
                     },
                     (errorDeviceSql) => {
                     });
