@@ -4,7 +4,6 @@ import {DatabaseService} from '../service/database.service';
 import {AuthService} from '../service/auth.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {Platform} from '@ionic/angular';
-import Encrypt from 'jsencrypt';
 
 @Injectable({
     providedIn: 'root'
@@ -239,9 +238,7 @@ export class BluetoothleService {
 
 
     private addDevice(device) {
-        // const encrypt = new Encrypt.JSEncrypt();
-        // encrypt.setPublicKey(this.authService.publicKey);
-        // const encryptedString = encrypt.encrypt(device.uuid);
+
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
         const timeString = this.datePipe.transform(dateNow, 'HH:mm:ss');

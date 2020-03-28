@@ -6,6 +6,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {DatabaseService} from './service/database.service';
 import {AuthService} from './service/auth.service';
+
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -22,6 +23,7 @@ export class AppComponent {
         private authService: AuthService
     ) {
         this.initializeApp();
+
     }
 
     initializeApp() {
