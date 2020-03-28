@@ -32,3 +32,6 @@ npm-debug.log*
 
 google-services.json
 /android/app/google-services.json
+
+/src/environments/environment.prod.ts
+/src/environments/environment.ts
