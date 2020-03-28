@@ -24,13 +24,13 @@ export class AppComponent {
     }
 
     initializeApp() {
-        this.platform.ready().then(async () => {
+        this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.backgroundMode.setDefaults({silent: true});
             if (this.platform.is('android')) {
-                await this.permission();
+                this.permission();
             }
-            await this.databaseService.createDatabase();
+            this.databaseService.createDatabase();
             this.backgroundMode.enable();
             this.splashScreen.hide();
         });

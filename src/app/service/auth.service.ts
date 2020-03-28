@@ -12,6 +12,7 @@ export class AuthService {
     private verificationId: any;
     private code: number;
     public loggedIn = false;
+    public publicKey = '';
 
     constructor(
         private firebaseAuthentication: FirebaseAuthentication,
@@ -37,6 +38,7 @@ export class AuthService {
                                 this.databaseService.insertUUID(successAddUser.id).then((uuidInserted) => {
                                     this.databaseService.insertPublicKey(pubprivkey.public).then((publicKeyInserted) => {
                                         this.loggedIn = true;
+                                        this.publicKey = pubprivkey.public;
                                         this.navCtrl.navigateRoot('/home');
                                     });
                                 });
@@ -44,8 +46,11 @@ export class AuthService {
                                 console.log('errorAddUser' + JSON.stringify(errorAddUser));
                             });
                         } else {
-                            this.loggedIn = true;
-                            this.navCtrl.navigateRoot('/home');
+                            this.databaseService.getPublicKey().then((publicKey) => {
+                                this.loggedIn = true;
+                                this.publicKey = publicKey;
+                                this.navCtrl.navigateRoot('/home');
+                            });
                         }
                     }, (error) => {
                         console.log('error getting UUID: ' + JSON.stringify(error));

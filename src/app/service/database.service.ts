@@ -12,7 +12,7 @@ export class DatabaseService {
     constructor(private sqlite: SQLite) {
     }
 
-    public createDatabase() {
+    createDatabase() {
         this.sqlite.create({
             name: 'data.db',
             location: 'default' // the location field is required
@@ -42,7 +42,10 @@ export class DatabaseService {
         this.db.executeSql(settingSql, []).then((successSettingSql) => {
                 const deviceSql = 'CREATE TABLE IF NOT EXISTS devices(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT,rssi INTEGER, date_found DATE, time_found TIME );';
                 this.db.executeSql(deviceSql, []).then((successDeviceSql) => {
-                        this.truncate();
+                        this.truncate().then((successTruncate) => {
+                            this.ready = true;
+                        }, (errorTruncate) => {
+                        });
                     },
                     (errorDeviceSql) => {
                     });
