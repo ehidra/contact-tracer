@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NavController} from '@ionic/angular';
-import {cfaSignIn, cfaSignInPhoneOnCodeSent, cfaSignInPhoneOnCodeReceived} from 'capacitor-firebase-auth';
+import {FirebaseAuthentication} from '@ionic-native/firebase-authentication/ngx';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -16,6 +16,7 @@ export class SignupPage implements OnInit {
     constructor(
         public formBuilder: FormBuilder,
         private navController: NavController,
+        private firebaseAuthentication: FirebaseAuthentication
     ) {
         this.signupForm = formBuilder.group({
             phone: ['+34647173288', Validators.compose([Validators.required])]
@@ -37,33 +38,10 @@ export class SignupPage implements OnInit {
                 phone: this.signupForm.value.phone
             };
             console.log('Sending Phone Number' + newUser.phone);
-            cfaSignIn('phone', {phone: newUser.phone}).subscribe(
-                (caSignIn) => {
-                    console.log(caSignIn.phoneNumber);
-                }, (errorCfaSignIn) => {
-                    console.log('Error Signing in phone UUID: ' + JSON.stringify(errorCfaSignIn));
-                }
-            );
+            this.firebaseAuthentication.verifyPhoneNumber(newUser.phone, 3000).then((res: any) => {
+                console.log(res);
+            }).catch((error: any) => console.error(error));
 
-            // Android and iOS
-            cfaSignInPhoneOnCodeSent().subscribe(
-                (verificationId) => {
-                    console.log(JSON.stringify(verificationId));
-                },
-                (error) => {
-                    console.log(JSON.stringify(error));
-                }
-            );
-
-            // Android Only
-            cfaSignInPhoneOnCodeReceived().subscribe(
-                (event: { verificationId: string, verificationCode: string }) => {
-                    console.log(`${event.verificationId}:${event.verificationCode}`);
-                },
-                (error) => {
-                    console.log(JSON.stringify(error));
-                }
-            );
         }
     }
 }

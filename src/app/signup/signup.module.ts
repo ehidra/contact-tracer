@@ -1,19 +1,21 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-
-import { SignupPageRoutingModule } from './signup-routing.module';
-import { SignupPage } from './signup.page';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {IonicModule} from '@ionic/angular';
+import {FirebaseAuthentication} from '@ionic-native/firebase-authentication/ngx';
+import {SignupPageRoutingModule} from './signup-routing.module';
+import {SignupPage} from './signup.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    SignupPageRoutingModule
-  ],
-  declarations: [SignupPage]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        SignupPageRoutingModule
+    ],
+    declarations: [SignupPage],
+    providers: [FirebaseAuthentication]
 })
-export class SignupPageModule {}
+export class SignupPageModule {
+}
