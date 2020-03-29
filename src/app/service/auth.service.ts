@@ -12,6 +12,7 @@ export class AuthService {
     private verificationId: any;
     private code: number;
     public loggedIn = false;
+    public uuid = '';
     public publicKey = '';
 
     constructor(
@@ -22,62 +23,64 @@ export class AuthService {
     ) {
     }
 
-    connect() {
-        this.firebaseAuthentication.onAuthStateChanged().subscribe((successOnAuthStateChange) => {
+    async connect() {
+
+        this.firebaseAuthentication.onAuthStateChanged().subscribe(async (successOnAuthStateChange) => {
                 console.log('successOnAuthStateChange: ' + JSON.stringify(successOnAuthStateChange));
                 if (successOnAuthStateChange !== '' && successOnAuthStateChange.uid) {
 
-                    this.databaseService.getUUID().then((sqlResult: any) => {
-                        if (sqlResult.rows.length === 0) {
+                    const getUUIDResult = await this.databaseService.getUUID();
+                    if (getUUIDResult.rows.length === 0) {
+                        const rsa = forge.pki.rsa;
 
-                            const rsa = forge.pki.rsa;
-                            rsa.generateKeyPair({bits: 2048, workers: 2}, (err, keypair) => {
+                        rsa.generateKeyPair({bits: 2048, workers: 2}, async (err, keypair) => {
+                            const privateKey = forge.pki.privateKeyToPem(keypair.privateKey);
+                            const publicKey = forge.pki.publicKeyToPem(keypair.publicKey);
+                            console.log('private' + JSON.stringify(privateKey));
+                            console.log('public' + JSON.stringify(publicKey));
+                            const user = {
+                                phone_number: successOnAuthStateChange.uid,
+                                join_date: new Date(),
+                                secret_key: privateKey
+                            };
+                            console.log('adding user' + JSON.stringify(user));
 
+                            const firebaseUser = await this.firebaseService.addUser(user);
+                            console.log('success add user ' + firebaseUser.id);
+                            const insertUUID = await this.databaseService.insertUUID(firebaseUser.id);
+                            console.log('insertUUID: ' + JSON.stringify(insertUUID));
+                            const insertPublicKey = await this.databaseService.insertPublicKey(publicKey);
+                            console.log('insertPublicKey: ' + JSON.stringify(insertPublicKey));
+                            this.loggedIn = true;
+                            this.uuid = firebaseUser.id;
+                            this.publicKey = publicKey;
+                            this.navCtrl.navigateRoot('/scan');
 
-                                const privateKey = forge.pki.privateKeyToPem(keypair.privateKey);
-                                const publicKey = forge.pki.publicKeyToPem(keypair.publicKey);
+                        });
+                    } else {
+                        this.loggedIn = true;
+                        const getPublicKeyResult = await this.databaseService.getPublicKey();
+                        this.uuid = getUUIDResult.rows.item(0).value;
+                        this.publicKey = getPublicKeyResult.rows.item(0).value;
+                        this.navCtrl.navigateRoot('/scan');
+                    }
 
-                                console.log('private' + JSON.stringify(privateKey));
-                                console.log('public' + JSON.stringify(publicKey));
-
-
-                                const user = {
-                                    phone_number: successOnAuthStateChange.uid,
-                                    join_date: new Date(),
-                                    secret_key: privateKey
-                                };
-                                console.log('adding user' + JSON.stringify(user));
-                                this.firebaseService.addUser(user).then((successAddUser) => {
-                                    console.log('success add user ' + successAddUser.id);
-                                    this.databaseService.insertUUID(successAddUser.id).then((uuidInserted) => {
-                                        this.databaseService.insertPublicKey('test').then((publicKeyInserted) => {
-                                            this.loggedIn = true;
-                                            this.publicKey = publicKey;
-                                            this.navCtrl.navigateRoot('/home');
-                                        });
-                                    });
-                                }, (errorAddUser) => {
-                                    console.log('errorAddUser' + JSON.stringify(errorAddUser));
-                                });
-
-                            });
-
-                        } else {
-                            this.databaseService.getPublicKey().then((publicKey) => {
-                                this.loggedIn = true;
-                                this.publicKey = publicKey;
-                                this.navCtrl.navigateRoot('/home');
-                            });
-                        }
-                    }, (error) => {
-                        console.log('error getting UUID: ' + JSON.stringify(error));
-                    });
                 }
             },
             (errorOnAuthStateChange) => {
                 console.log('errorOnAuthStateChange: ' + JSON.stringify(errorOnAuthStateChange));
             }
         );
+
+        let getIdTokenResult = null;
+        try {
+            getIdTokenResult = await this.firebaseAuthentication.getIdToken(true);
+            console.log('getIdTokenResult: ' + JSON.stringify(getIdTokenResult));
+        } catch (e) {
+            // not connected to firebase
+            this.navCtrl.navigateRoot('/signup');
+        }
+
     }
 
     signUp(phone) {

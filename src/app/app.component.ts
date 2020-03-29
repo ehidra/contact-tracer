@@ -5,6 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {DatabaseService} from './service/database.service';
+import {LoadingService} from './service/loading.service';
 import {AuthService} from './service/auth.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class AppComponent {
         private backgroundMode: BackgroundMode,
         private bluetoothLE: BluetoothLE,
         private databaseService: DatabaseService,
-        private authService: AuthService
+        private authService: AuthService,
+        private loadingService: LoadingService
     ) {
         this.initializeApp();
 
@@ -33,24 +35,26 @@ export class AppComponent {
             if (this.platform.is('android')) {
                 this.permission();
             }
-            this.databaseService.createDatabase();
-            this.blockUntilDbReady();
+
+            this.loadingService.presentLoading('Connecting to data base.').then(a => {
+                this.databaseService.createDatabase().then((successDataBase) => {
+                    console.log('Database connected' + successDataBase);
+                    this.loadingService.dismiss();
+                    this.authService.connect().then((successConnect) => {
+
+                        }
+                        , (errorConnect) => {
+                        
+                        });
+                }, (errorCreateDatabase) => {
+                    console.log('errorcreateDatabase' + JSON.stringify(errorCreateDatabase));
+                });
+            });
             this.backgroundMode.enable();
             this.splashScreen.hide();
         });
     }
 
-    blockUntilDbReady() {
-        if (this.databaseService.ready === false) {
-            this.delay(1000).then((successTimeoutScan) => {
-                this.blockUntilDbReady();
-            }, (errorTimeoutScan) => {
-                console.log('DB block until ready Timeout Error: ' + JSON.stringify(errorTimeoutScan));
-            });
-        } else {
-            this.authService.connect();
-        }
-    }
 
     private delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));

@@ -1,15 +1,18 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-title>signup</ion-title>
-    </ion-toolbar>
-</ion-header>
-
 <ion-content>
     <ion-grid *ngIf="this.submitAttempt == false">
         <form [formGroup]="signupForm">
-
             <ion-row class="ion-justify-content-center">
                 <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <div class="logo-register ion-text-center ion-padding">
+                        <img src="./assets/logo-dark.png">
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <ion-label>
+                        Enter you mobile phone number and press the sign up button. You will receive an SMS with a verification code. Ex (+34XXXXXXXXX)
+                    </ion-label>
                     <ion-item>
                         <ion-input formControlName="phone" type="phone" placeholder="Phone (+34XXXXXXXXX)">
                         </ion-input>
@@ -27,16 +30,12 @@
             <ion-row class="ion-justify-content-center">
                 <ion-col size-md="6" size-lg="6" size-xs="12">
                     <div>
-                        <ion-button (click)="validatePhone()" expand="block"><b>Sing Up</b>
-                        </ion-button>
-
-                        <ion-button (click)="logout()" expand="block"><b>Log Out</b>
+                        <ion-button color="primary" (click)="validatePhone()" expand="block"><b>Sign Up</b>
                         </ion-button>
                     </div>
                 </ion-col>
             </ion-row>
         </form>
     </ion-grid>
-
 </ion-content>
 

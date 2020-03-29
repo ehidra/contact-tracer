@@ -12,47 +12,35 @@ export class DatabaseService {
     constructor(private sqlite: SQLite) {
     }
 
-    createDatabase() {
-        this.sqlite.create({
+    async createDatabase() {
+
+        const db = await this.sqlite.create({
             name: 'data.db',
             location: 'default' // the location field is required
-        })
-            .then((db) => {
-                this.setDatabase(db);
-            })
-            .then(() => {
-                // console.log('Data base set up correctly');
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        });
+        return await this.setDatabase(db);
     }
 
     // public methods
 
-    setDatabase(db: SQLiteObject) {
+    async setDatabase(db: SQLiteObject) {
         if (this.db === null) {
             this.db = db;
-            this.createTable();
+            return await this.createTable();
+        } else {
+            throw Error ('Set Database Error');
         }
     }
 
-    createTable() {
+    async createTable() {
         const settingSql = 'CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,value TEXT);';
-        this.db.executeSql(settingSql, []).then((successSettingSql) => {
-                const deviceSql = 'CREATE TABLE IF NOT EXISTS devices(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT,rssi INTEGER, date_found DATE, time_found TIME );';
-                this.db.executeSql(deviceSql, []).then((successDeviceSql) => {
-                        // this.truncate().then((successTruncate) => {
-                        //     this.ready = true;
-                        // }, (errorTruncate) => {
-                        // });
-                        this.ready = true;
-                    },
-                    (errorDeviceSql) => {
-                    });
-            },
-            (errorSettingSql) => {
-            });
+        const deviceSql = 'CREATE TABLE IF NOT EXISTS devices(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT,rssi INTEGER, date_found DATE, time_found TIME );';
+        const settingSqlResult = await this.db.executeSql(settingSql, []);
+        console.log('settingSqlResult: ' + JSON.stringify(settingSqlResult));
+        const deviceSqlResult = await this.db.executeSql(deviceSql, []);
+        console.log('deviceSqlResult: ' + JSON.stringify(deviceSqlResult));
+        this.ready = true;
+        return this.ready;
     }
 
     create(device: any) {

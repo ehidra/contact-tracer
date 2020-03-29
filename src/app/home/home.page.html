@@ -1,38 +1,10 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-title>
-            Blank
-        </ion-title>
-    </ion-toolbar>
-</ion-header>
-
 <ion-content>
     <ion-grid>
         <ion-row class="ion-justify-content-center">
-            <ion-col size-md="6" size-lg="6" size-xs="12">
-                <div *ngIf="this.myDevice">
-                    <div>My Device: {{this.myDevice}}</div>
+            <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+                <div class="ion-padding ion-text-center">
+                    <img src="../../assets/logo.png">
                 </div>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-center">
-            <ion-col size-md="6" size-lg="6" size-xs="12">
-                <ion-button (click)="cleanDevices()">Clean Devices</ion-button>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-center">
-            <ion-col size-md="6" size-lg="6" size-xs="12">
-                <ion-list>
-                    <ion-item *ngFor="let device of this.devices; let even = even" [color]="even? '' : 'light'"
-                              lines="none">
-                        <ion-label class="ion-text-wrap">
-                            UUID: {{device.uuid}} <br>
-                            RSSI: {{device.rssi}}<br>
-                            DATETIME: {{device.date_found}} :  {{device.time_found}}
-                        </ion-label>
-                    </ion-item>
-                </ion-list>
             </ion-col>
         </ion-row>
     </ion-grid>
