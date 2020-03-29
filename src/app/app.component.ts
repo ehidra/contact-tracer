@@ -39,13 +39,11 @@ export class AppComponent {
             this.loadingService.presentLoading('Connecting to data base.').then(a => {
                 this.databaseService.createDatabase().then((successDataBase) => {
                     console.log('Database connected' + successDataBase);
-                    this.loadingService.dismiss();
                     this.authService.connect().then((successConnect) => {
-
-                        }
-                        , (errorConnect) => {
-                        
-                        });
+                        this.loadingService.dismiss();
+                    }, (errorConnect) => {
+                        this.loadingService.dismiss();
+                    });
                 }, (errorCreateDatabase) => {
                     console.log('errorcreateDatabase' + JSON.stringify(errorCreateDatabase));
                 });
@@ -53,11 +51,6 @@ export class AppComponent {
             this.backgroundMode.enable();
             this.splashScreen.hide();
         });
-    }
-
-
-    private delay(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     permission() {
