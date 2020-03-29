@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {FirebaseService} from '../service/firebase.service';
 import {DatabaseService} from '../service/database.service';
 import {FirebaseAuthentication} from '@ionic-native/firebase-authentication/ngx';
-import Keypair from 'keypair';
+import * as forge from 'node-forge';
 import {NavController, Platform} from '@ionic/angular';
 
 @Injectable({
@@ -20,7 +20,6 @@ export class AuthService {
         private databaseService: DatabaseService,
         private navCtrl: NavController
     ) {
-
     }
 
     connect() {
@@ -30,25 +29,39 @@ export class AuthService {
 
                     this.databaseService.getUUID().then((sqlResult: any) => {
                         if (sqlResult.rows.length === 0) {
-                            const pubprivkey = Keypair();
-                            const user = {
-                                phone_number: successOnAuthStateChange.phoneNumber,
-                                join_date: new Date(),
-                                secret_key: pubprivkey.private
-                            };
-                            console.log('adding user' + JSON.stringify(user));
-                            this.firebaseService.addUser(user).then((successAddUser) => {
-                                console.log('success add user ' + successAddUser.id);
-                                this.databaseService.insertUUID(successAddUser.id).then((uuidInserted) => {
-                                    this.databaseService.insertPublicKey(pubprivkey.public).then((publicKeyInserted) => {
-                                        this.loggedIn = true;
-                                        this.publicKey = pubprivkey.public;
-                                        this.navCtrl.navigateRoot('/home');
+
+                            const rsa = forge.pki.rsa;
+                            rsa.generateKeyPair({bits: 2048, workers: 2}, (err, keypair) => {
+
+
+                                const privateKey = forge.pki.privateKeyToPem(keypair.privateKey);
+                                const publicKey = forge.pki.publicKeyToPem(keypair.publicKey);
+
+                                console.log('private' + JSON.stringify(privateKey));
+                                console.log('public' + JSON.stringify(publicKey));
+
+
+                                const user = {
+                                    phone_number: successOnAuthStateChange.uid,
+                                    join_date: new Date(),
+                                    secret_key: privateKey
+                                };
+                                console.log('adding user' + JSON.stringify(user));
+                                this.firebaseService.addUser(user).then((successAddUser) => {
+                                    console.log('success add user ' + successAddUser.id);
+                                    this.databaseService.insertUUID(successAddUser.id).then((uuidInserted) => {
+                                        this.databaseService.insertPublicKey('test').then((publicKeyInserted) => {
+                                            this.loggedIn = true;
+                                            this.publicKey = publicKey;
+                                            this.navCtrl.navigateRoot('/home');
+                                        });
                                     });
+                                }, (errorAddUser) => {
+                                    console.log('errorAddUser' + JSON.stringify(errorAddUser));
                                 });
-                            }, (errorAddUser) => {
-                                console.log('errorAddUser' + JSON.stringify(errorAddUser));
+
                             });
+
                         } else {
                             this.databaseService.getPublicKey().then((publicKey) => {
                                 this.loggedIn = true;

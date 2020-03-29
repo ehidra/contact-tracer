@@ -4,6 +4,7 @@ import {DatabaseService} from '../service/database.service';
 import {AuthService} from '../service/auth.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {Platform} from '@ionic/angular';
+import * as forge from 'node-forge';
 
 @Injectable({
     providedIn: 'root'
@@ -242,8 +243,11 @@ export class BluetoothleService {
         const dateNow = Date.now();
         const dateString = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
         const timeString = this.datePipe.transform(dateNow, 'HH:mm:ss');
+
+        const publicKey = forge.pki.publicKeyFromPem(this.authService.publicKey) as forge.pki.rsa.PublicKey;
+        const encryptText = publicKey.encrypt(forge.util.encodeUtf8(device.uuid));
         this.databaseService.create({
-            uuid: device.uuid,
+            uuid: encryptText,
             rssi: device.rssi,
             date_found: dateString,
             time_found: timeString
