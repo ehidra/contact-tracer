@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.memiah.contact.tracer">
+    package="com.ehidra.contact.tracer">
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="com.memiah.contact.tracer.MainActivity"
+            android:name="com.ehidra.contact.tracer.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask">

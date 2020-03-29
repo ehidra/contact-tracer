@@ -1,4 +1,4 @@
-package com.memiah.contact.tracer;
+package com.ehidra.contact.tracer;
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
