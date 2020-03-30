@@ -1,31 +1,50 @@
 <ion-content>
-  <ion-grid>
-    <ion-row class="ion-justify-content-center">
-      <ion-col size-md="6" size-lg="6" size-xs="12">
-        <div *ngIf="this.myDevice">
-          <div>My Device: {{this.myDevice}}</div>
-        </div>
-      </ion-col>
-    </ion-row>
+    <ion-grid>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <div class="your_uuid">Your UUID:<br> {{this.myDevice}}</div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <ion-list>
+                    <ion-item lines="none">
+                        <ion-label>Scanning</ion-label>
+                        <ion-spinner *ngIf="this.isScanning === false" paused name="dots"
+                                     color="secondary"></ion-spinner>
+                        <ion-spinner *ngIf="this.isScanning === true" name="dots" color="secondary"></ion-spinner>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-label>Advertising</ion-label>
+                        <ion-spinner *ngIf="this.isAdvertising === false" paused name="dots"
+                                     color="secondary"></ion-spinner>
+                        <ion-spinner *ngIf="this.isAdvertising === true" name="dots" color="secondary"></ion-spinner>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
 
-    <ion-row class="ion-justify-content-center">
-      <ion-col size-md="6" size-lg="6" size-xs="12">
-        <ion-button (click)="cleanDevices()">Clean Devices</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-justify-content-center">
-      <ion-col size-md="6" size-lg="6" size-xs="12">
-        <ion-list>
-          <ion-item *ngFor="let device of this.devices; let even = even" [color]="even? '' : 'light'"
-                    lines="none">
-            <ion-label class="ion-text-wrap">
-              UUID: {{device.uuid}} <br>
-              RSSI: {{device.rssi}}<br>
-              DATETIME: {{device.date_found}} :  {{device.time_found}}
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <ion-button expand="full" (click)="cleanDevices()">Clean Devices</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-md="6" size-lg="6" size-xs="12">
+                <div class="last_devices">Last 20 UUID near you:</div>
+                <ion-list>
+                    <ion-item *ngFor="let device of this.devices; let even = even" [color]="even? '' : 'light'"
+                              lines="none">
+                        <ion-label class="ion-text-wrap">
+                            <div class="device_uuid">UUID: {{device.uuid}}</div>
+                            <br>
+                            <div class="device_rssi">RSSI: {{device.rssi}}</div>
+                        </ion-label>
+                        <div class="device_time" slot="end">DATETIME: {{device.date_found}}
+                            :  {{device.time_found}}</div>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

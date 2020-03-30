@@ -13,6 +13,8 @@ export class ScanPage implements OnInit {
 
     private devices: any = [];
     private myDevice: any = null;
+    private isScanning = false;
+    private isAdvertising = false;
 
     constructor(
         private bluetoothleService: BluetoothleService,
@@ -26,18 +28,20 @@ export class ScanPage implements OnInit {
 
     ionViewWillEnter() {
         this.myDevice = this.authService.uuid;
-        this.bluetoothleService.initializeCentral(this.myDevice);
-        this.getAllDevices();
+        this.bluetoothleService.initializeCentral();
+        this.refreshView();
     }
 
-    getAllDevices() {
+    refreshView() {
 
         setInterval(() => {
-            this.databaseService.getAll().then(deviceList => {
+            this.isScanning = this.bluetoothleService.isScanning;
+            this.isAdvertising = this.bluetoothleService.isAdvertising;
+            this.databaseService.getLast20().then(deviceList => {
                 this.devices = deviceList;
             });
             console.log('device list updated');
-        }, 5000);
+        }, 2000);
 
     }
 

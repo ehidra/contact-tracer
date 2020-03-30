@@ -77,6 +77,21 @@ export class DatabaseService {
             });
     }
 
+    getLast20() {
+        const sql = 'SELECT * FROM devices ORDER BY date_found, time_found DESC LIMIT 20';
+        return this.db.executeSql(sql, [])
+            .then(response => {
+                const devices = [];
+                for (let index = 0; index < response.rows.length; index++) {
+                    devices.push(response.rows.item(index));
+                }
+                return Promise.resolve(devices);
+            })
+            .catch(error => {
+                return Promise.reject(error);
+            });
+    }
+
     getDevice(device) {
 
         const sql = 'SELECT * FROM devices WHERE uuid = ' + '\'' + device.device + '\'';

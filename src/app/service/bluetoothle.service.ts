@@ -13,6 +13,8 @@ export class BluetoothleService {
 
     private connectedTries = [];
     private myDevice = null;
+    public isScanning = false;
+    public isAdvertising = false;
 
     constructor(private bluetoothLE: BluetoothLE,
                 private databaseService: DatabaseService,
@@ -37,7 +39,7 @@ export class BluetoothleService {
                     console.log('initializePeripheral: ' + JSON.stringify(successInitializePeripheralResult));
                     // We create the Blueetoothle service
                     const characteristics = {
-                        service: '1234',
+                        service: '1819',
                         characteristics: [
                             {
                                 uuid: '2ab4aacd-ccea-4cf8-9f27-a25fe60ac5f0',
@@ -82,9 +84,13 @@ export class BluetoothleService {
         try {
             const startAdvertisingResult = await this.startAdvertising();
             if (startAdvertisingResult.status === 'advertisingStarted') {
+                console.log('advertisingStarted');
+                this.isAdvertising = true;
                 await this.delay(4000);
                 const stopAdvertisingResult = await this.stopAdvertising();
                 if (stopAdvertisingResult.status === 'advertisingStopped') {
+                    console.log('advertisingStopped');
+                    this.isAdvertising = false;
                     if (this.platform.is('ios')) {
                         await this.delay(4000);
                     }
@@ -103,8 +109,8 @@ export class BluetoothleService {
         const encodedString = this.bluetoothLE.bytesToEncodedString(encodedBytes);
 
         const params = {
-            services: ['1234'], // iOS
-            service: '1234', // Android
+            services: ['1819'], // iOS
+            service: '1819', // Android
             name: uuid,
             mode: 'balanced',
             // timeout: 2000,
@@ -124,9 +130,9 @@ export class BluetoothleService {
     // END PERIPHERAL CODE
     // START CENTRAL CODE
 
-    initializeCentral(myDevice) {
+    initializeCentral() {
 
-        this.myDevice = myDevice;
+        this.myDevice = this.authService.uuid;
         // Initialise the central service for the bluetoothle
         const config = {
             request: true,
@@ -141,40 +147,37 @@ export class BluetoothleService {
                 this.initializePeripheral();
                 this.manageScanCycle();
             } else if (successInitialize.status === 'disabled') {
-
                 if (this.platform.is('android')) {
                     this.bluetoothLE.enable();
                 }
-                this.initializeCentral(this.myDevice);
+                this.initializeCentral();
             }
         }, (errorInitialize) => {
             console.log('Error Initialize: ' + JSON.stringify(errorInitialize));
         });
     }
 
-    manageScanCycle() {
-
-        this.startScan();
-        this.delay(10000).then((successTimeoutScan) => {
-            this.stopScan().then((successStopScan) => {
-                console.log('StopScan Success: ' + JSON.stringify(successStopScan));
-                this.delay(10000).then((successSecondTimeoutScan) => {
-                    this.manageScanCycle();
-                }, (errorSecondTimeoutScan) => {
-                    console.log('Scan Second Timeout Error: ' + JSON.stringify(errorSecondTimeoutScan));
-                });
-            }, (errorStopScan) => {
-                console.log('StopScan Error: ' + JSON.stringify(errorStopScan));
-            });
-        }, (errorTimeoutScan) => {
-            console.log('Scan Timeout Error: ' + JSON.stringify(errorTimeoutScan));
-        });
+    async manageScanCycle() {
+        try {
+            this.startScan();
+            console.log('Scan Started');
+            this.isScanning = true;
+            await this.delay(10000);
+            await this.stopScan();
+            console.log('Stop Scan');
+            this.isScanning = false;
+            await this.delay(10000);
+            this.manageScanCycle();
+        } catch (e) {
+            console.log('Error managing Scan Cycle');
+            throw Error('Error managing Scan Cycle');
+        }
     }
 
     startScan() {
         this.connectedTries = [];
         const params = {
-            services: ['1234'],
+            services: ['1819'],
             allowDuplicates: false,
             scanMode: this.bluetoothLE.SCAN_MODE_LOW_POWER,
             matchMode: this.bluetoothLE.MATCH_MODE_STICKY,

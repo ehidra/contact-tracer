@@ -32,9 +32,12 @@ export class SignupPage implements OnInit {
     }
 
     ngOnInit() {
+        this.step1 = true;
+        this.step2 = false;
+    }
 
-        this.step1 = true
-        this.step1 = false;
+    ionViewWillEnter() {
+
     }
 
     async validatePhone() {

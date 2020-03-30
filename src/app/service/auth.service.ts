@@ -10,7 +10,6 @@ import {NavController, Platform} from '@ionic/angular';
 })
 export class AuthService {
     private verificationId: any;
-    private code: number;
     public loggedIn = false;
     public uuid = '';
     public publicKey = '';
@@ -55,7 +54,7 @@ export class AuthService {
                             this.loggedIn = true;
                             this.uuid = firebaseUser.id;
                             this.publicKey = publicKey;
-                            this.navCtrl.navigateRoot('/scan');
+                            await this.navCtrl.navigateRoot('/scan');
 
                         });
                     } else {
@@ -63,7 +62,7 @@ export class AuthService {
                         const getPublicKeyResult = await this.databaseService.getPublicKey();
                         this.uuid = getUUIDResult.rows.item(0).value;
                         this.publicKey = getPublicKeyResult.rows.item(0).value;
-                        this.navCtrl.navigateRoot('/scan');
+                        await this.navCtrl.navigateRoot('/scan');
                     }
 
                 }
@@ -79,8 +78,8 @@ export class AuthService {
             console.log('getIdTokenResult: ' + JSON.stringify(getIdTokenResult));
         } catch (e) {
             // not connected to firebase
-            console.log('getIdTokenResult: ' + e);
-            this.navCtrl.navigateRoot('/signup');
+            console.log('Error getIdTokenResult : ' + e);
+            await this.navCtrl.navigateRoot('/signup');
         }
 
     }

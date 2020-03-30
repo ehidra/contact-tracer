@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">contact-tracer</string>
+    <string name="app_name">Contact Tracer</string>
     <string name="title_activity_main">contact-tracer</string>
     <string name="package_name">com.ehidra.contact.tracer</string>
     <string name="custom_url_scheme">com.ehidra.contact.tracer</string>
