@@ -31,41 +31,43 @@ export class BluetoothleService {
         };
 
         // everytime the peripheral is interacted with , it will call this function
-        this.bluetoothLE.initializePeripheral(configPeripheral).subscribe((successInitializePeripheralResult) => {
+        this.bluetoothLE.initializePeripheral(configPeripheral).subscribe(async (successInitializePeripheralResult) => {
             if (successInitializePeripheralResult.status === 'enabled') {
 
-                console.log('initializePeripheral: ' + JSON.stringify(successInitializePeripheralResult));
-                // We create the Blueetoothle service
-                const characteristics = {
-                    service: '1234',
-                    characteristics: [
-                        {
-                            uuid: '2ab4aacd-ccea-4cf8-9f27-a25fe60ac5f0',
-                            permissions: {
-                                read: true,
-                                write: true,
-                                // readEncryptionRequired: true,
-                                // writeEncryptionRequired: true,
-                            },
-                            properties: {
-                                read: true,
-                                writeWithoutResponse: true,
-                                write: true,
-                                notify: true,
-                                indicate: true,
-                                // authenticatedSignedWrites: true,
-                                // notifyEncryptionRequired: true,
-                                // indicateEncryptionRequired: true,
+                try {
+
+
+                    console.log('initializePeripheral: ' + JSON.stringify(successInitializePeripheralResult));
+                    // We create the Blueetoothle service
+                    const characteristics = {
+                        service: '1234',
+                        characteristics: [
+                            {
+                                uuid: '2ab4aacd-ccea-4cf8-9f27-a25fe60ac5f0',
+                                permissions: {
+                                    read: true,
+                                    write: true,
+                                    // readEncryptionRequired: true,
+                                    // writeEncryptionRequired: true,
+                                },
+                                properties: {
+                                    read: true,
+                                    writeWithoutResponse: true,
+                                    write: true,
+                                    notify: true,
+                                    indicate: true,
+                                    // authenticatedSignedWrites: true,
+                                    // notifyEncryptionRequired: true,
+                                    // indicateEncryptionRequired: true,
+                                }
                             }
-                        }
-                    ]
-                };
-                this.bluetoothLE.addService(characteristics).then((successAddService) => {
-                    console.log('Peripheral addService: ' + JSON.stringify(successAddService));
-                    this.manageAdvertisingCycle();
-                }, (errorAddService) => {
-                    console.log('Peripheral addService Error: ' + JSON.stringify(errorAddService));
-                });
+                        ]
+                    };
+                    const addServiceResult = await this.bluetoothLE.addService(characteristics);
+                    const manageAdvertisingCycleResult = await this.manageAdvertisingCycle();
+                } catch (e) {
+                    console.log('Error Adding Service and Advertising' + e);
+                }
             }
 
             // If read request received just send the phone UUID so we now who is in the other end
@@ -78,15 +80,23 @@ export class BluetoothleService {
         });
     }
 
-    manageAdvertisingCycle() {
+    async manageAdvertisingCycle() {
 
-        this.startAdvertising();
-        this.delay(4000).then((successTimeoutAdvertising) => {
-            this.stopAdvertising();
-        }, (errorTimeoutAdvertising) => {
-            console.log('Scan Timeout Advertising: ' + JSON.stringify(errorTimeoutAdvertising));
-        });
-
+        try {
+            const startAdvertisingResult = await this.startAdvertising();
+            if (startAdvertisingResult.status === 'advertisingStarted') {
+                await this.delay(4000);
+                const stopAdvertisingResult = await this.stopAdvertising();
+                if (stopAdvertisingResult.status === 'advertisingStopped') {
+                    if (this.platform.is('ios')) {
+                        await this.delay(4000);
+                    }
+                }
+            }
+            await this.manageAdvertisingCycle();
+        } catch (e) {
+            console.log('manageAdvertisingCycleError: ' + e);
+        }
     }
 
     startAdvertising() {
@@ -107,30 +117,11 @@ export class BluetoothleService {
             includeDeviceName: false,
             manufacturerSpecificData: encodedString
         };
-        this.bluetoothLE.startAdvertising(params).then((successStartAdvertising) => {
-            console.log('Peripheral startAdvertising: ' + JSON.stringify(successStartAdvertising));
-        }, (errorStartAdvertising) => {
-            console.log('Peripheral startAdvertising Error: ' + JSON.stringify(errorStartAdvertising));
-        });
+        return this.bluetoothLE.startAdvertising(params);
     }
 
     stopAdvertising() {
-        this.bluetoothLE.stopAdvertising().then((successstopAdvertising) => {
-            console.log('Peripheral stopAdvertising: ' + JSON.stringify(successstopAdvertising));
-            if (this.platform.is('ios')) {
-                this.delay(4000).then((successTimeoutAdvertising) => {
-                    this.manageAdvertisingCycle();
-                }, (errorTimeoutAdvertising) => {
-                    console.log('Scan Timeout Advertising: ' + JSON.stringify(errorTimeoutAdvertising));
-                    this.manageAdvertisingCycle();
-                });
-            } else if (this.platform.is('android')) {
-                this.manageAdvertisingCycle();
-            }
-
-        }, (errorStopAdvertising) => {
-            console.log('Peripheral stopAdvertising Error: ' + JSON.stringify(errorStopAdvertising));
-        });
+        return this.bluetoothLE.stopAdvertising();
     }
 
     // END PERIPHERAL CODE

@@ -78,6 +78,7 @@ export class AuthService {
             console.log('getIdTokenResult: ' + JSON.stringify(getIdTokenResult));
         } catch (e) {
             // not connected to firebase
+            console.log('getIdTokenResult: ' + e);
             this.navCtrl.navigateRoot('/signup');
         }
 
