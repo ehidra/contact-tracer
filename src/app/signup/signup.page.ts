@@ -33,7 +33,8 @@ export class SignupPage implements OnInit {
 
     ngOnInit() {
 
-        this.step1 = true;
+        this.step1 = true
+        this.step1 = false;
     }
 
     async validatePhone() {
@@ -49,7 +50,7 @@ export class SignupPage implements OnInit {
                 this.step1 = false;
                 this.step2 = true;
             } catch (e) {
-                console.log('Signup error happened');
+                console.log('SignUp error happened');
             }
         }
     }
