@@ -1,0 +1,18 @@
+{
+  "appId": "com.ehidra.contact.tracer",
+  "appName": "contact-tracer",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {},
+  "linuxAndroidStudioPath": "/home/carlos/android-studio/bin/studio.sh",
+  "plugins": {
+    "CapacitorFirebaseAuth": {
+      "providers": [
+        "phone"
+      ],
+      "languageCode": "en",
+      "nativeAuth": false
+    }
+  }
+}

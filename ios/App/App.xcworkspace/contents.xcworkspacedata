@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:App.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:App"
+      name = "App">
+      <FileRef
+         location = "group:App/capacitor.config.json">
+      </FileRef>
+      <FileRef
+         location = "group:App/AppDelegate.swift">
+      </FileRef>
+      <Group
+         location = "group:App"
+         name = "Main.storyboard">
+         <FileRef
+            location = "group:App/Base.lproj/Main.storyboard">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:App/Assets.xcassets">
+      </FileRef>
+      <Group
+         location = "group:App"
+         name = "LaunchScreen.storyboard">
+         <FileRef
+            location = "group:App/Base.lproj/LaunchScreen.storyboard">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:App/Info.plist">
+      </FileRef>
+      <FileRef
+         location = "group:App/config.xml">
+      </FileRef>
+      <FileRef
+         location = "group:public">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>

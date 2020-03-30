@@ -19,7 +19,8 @@ export class AuthService {
         private firebaseAuthentication: FirebaseAuthentication,
         private firebaseService: FirebaseService,
         private databaseService: DatabaseService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        private platform: Platform
     ) {
     }
 
@@ -88,14 +89,17 @@ export class AuthService {
         console.log('signing up');
         this.firebaseAuthentication.verifyPhoneNumber(phone, 3000).then((successVerifyPhoneNumber: any) => {
             console.log('successVerifyPhoneNumber: ' + JSON.stringify(successVerifyPhoneNumber));
-            this.verificationId = successVerifyPhoneNumber.verificationId;
+            this.verificationId = successVerifyPhoneNumber;
+            if (this.platform.is('ios')) {
+                console.log('login');
+            }
         }).catch((errorVerifyPhoneNumber: any) => {
             console.log('errorVerifyPhoneNumber: ' + JSON.stringify(errorVerifyPhoneNumber));
         });
     }
 
-    verify() {
-        const sigInCredential = this.firebaseAuthentication.signInWithVerificationId(this.verificationId, this.code).then((successSignInWithVerificationId) => {
+    verify(code) {
+        const sigInCredential = this.firebaseAuthentication.signInWithVerificationId(this.verificationId, code as number).then((successSignInWithVerificationId) => {
             console.log('successSignInWithVerificationId: ' + JSON.stringify(successSignInWithVerificationId));
         }, (errorSignInWithVerificationId) => {
             console.log('errorSignInWithVerificationId: ' + JSON.stringify(errorSignInWithVerificationId));
