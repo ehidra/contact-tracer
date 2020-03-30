@@ -247,7 +247,7 @@ export class BluetoothleService {
         const publicKey = forge.pki.publicKeyFromPem(this.authService.publicKey) as forge.pki.rsa.PublicKey;
         const encryptText = publicKey.encrypt(forge.util.encodeUtf8(device.uuid));
         this.databaseService.create({
-            uuid: encryptText,
+            uuid: device.uuid,
             rssi: device.rssi,
             date_found: dateString,
             time_found: timeString

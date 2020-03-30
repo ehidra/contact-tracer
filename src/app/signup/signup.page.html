@@ -1,5 +1,5 @@
 <ion-content>
-    <ion-grid *ngIf="this.submitAttempt == false">
+    <ion-grid *ngIf="this.step1 === true">
         <form [formGroup]="signupForm">
             <ion-row class="ion-justify-content-center">
                 <ion-col size-md="6" size-lg="6" size-xs="12">
@@ -31,6 +31,44 @@
                 <ion-col size-md="6" size-lg="6" size-xs="12">
                     <div>
                         <ion-button color="primary" (click)="validatePhone()" expand="block"><b>Sign Up</b>
+                        </ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </form>
+    </ion-grid>
+    <ion-grid *ngIf="this.step2 === true">
+        <form [formGroup]="verifyForm">
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <div class="logo-register ion-text-center ion-padding">
+                        <img src="./assets/logo-dark.png">
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <ion-label>
+                        You should have a SMS delivered to you phone, enter the code and press the verify button
+                    </ion-label>
+                    <ion-item>
+                        <ion-input formControlName="code" type="code" placeholder="Code (XXXXXX)">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item *ngIf=" !verifyForm.controls.code.valid &&
+                                               (verifyForm.controls.code.dirty || verifyAttempt)"
+                              [class.invalid]="!verifyForm.controls.code.valid
+                                               && (verifyForm.controls.code.dirty || verifyAttempt)"
+                              lines="none">
+                        <p class="pyc_error">Code is not valid.</p>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-md="6" size-lg="6" size-xs="12">
+                    <div>
+                        <ion-button color="primary" (click)="verifyPhone()" expand="block"><b>Verify</b>
                         </ion-button>
                     </div>
                 </ion-col>

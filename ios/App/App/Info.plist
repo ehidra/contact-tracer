@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need to use Bluetooth to find other people using the app near you</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -26,6 +28,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>capacitor</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>firebase</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.318875307702-vjshm2aj2a6o1iigmqkh21371gpppn42</string>
 			</array>
 		</dict>
 	</array>
@@ -55,6 +67,7 @@
 		<string>bluetooth-central</string>
 		<string>bluetooth-peripheral</string>
 		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
