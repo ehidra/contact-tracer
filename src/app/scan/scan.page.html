@@ -1,6 +1,14 @@
-<ion-content>
+<ion-content class="ct-padding-top">
     <ion-grid>
+        <ion-row class="ion-justify-content-center ct-background">
+            <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+                <div class="ion-padding ion-text-center">
+                    <img src="../../assets/logo.png">
+                </div>
+            </ion-col>
+        </ion-row>
         <ion-row class="ion-justify-content-center">
+
             <ion-col size-md="6" size-lg="6" size-xs="12">
                 <div class="your_uuid">Your UUID:<br> {{this.myDevice}}</div>
             </ion-col>
@@ -35,13 +43,12 @@
                 <ion-list>
                     <ion-item *ngFor="let device of this.devices; let even = even" [color]="even? '' : 'light'"
                               lines="none">
-                        <ion-label class="ion-text-wrap">
+                        <ion-label class="ion-text-wrap ion-text-center">
                             <div class="device_uuid">UUID: {{device.uuid}}</div>
-                            <br>
-                            <div class="device_rssi">RSSI: {{device.rssi}}</div>
+                            <div class="device_rssi"> (RSSI: {{device.rssi}})</div>
+                            <div class="device_time">DATETIME: {{device.date_found}} {{device.time_found}}</div>
                         </ion-label>
-                        <div class="device_time" slot="end">DATETIME: {{device.date_found}}
-                            :  {{device.time_found}}</div>
+
                     </ion-item>
                 </ion-list>
             </ion-col>
