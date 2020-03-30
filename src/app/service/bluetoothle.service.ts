@@ -33,10 +33,7 @@ export class BluetoothleService {
         // everytime the peripheral is interacted with , it will call this function
         this.bluetoothLE.initializePeripheral(configPeripheral).subscribe(async (successInitializePeripheralResult) => {
             if (successInitializePeripheralResult.status === 'enabled') {
-
                 try {
-
-
                     console.log('initializePeripheral: ' + JSON.stringify(successInitializePeripheralResult));
                     // We create the Blueetoothle service
                     const characteristics = {
@@ -86,12 +83,12 @@ export class BluetoothleService {
             const startAdvertisingResult = await this.startAdvertising();
             if (startAdvertisingResult.status === 'advertisingStarted') {
                 await this.delay(4000);
-                const stopAdvertisingResult = await this.stopAdvertising();
-                if (stopAdvertisingResult.status === 'advertisingStopped') {
-                    if (this.platform.is('ios')) {
-                        await this.delay(4000);
-                    }
-                }
+                // const stopAdvertisingResult = await this.stopAdvertising();
+                // if (stopAdvertisingResult.status === 'advertisingStopped') {
+                //    if (this.platform.is('ios')) {
+                //        await this.delay(4000);
+                //    }
+                // }
             }
             await this.manageAdvertisingCycle();
         } catch (e) {
