@@ -83,12 +83,12 @@ export class BluetoothleService {
             const startAdvertisingResult = await this.startAdvertising();
             if (startAdvertisingResult.status === 'advertisingStarted') {
                 await this.delay(4000);
-                // const stopAdvertisingResult = await this.stopAdvertising();
-                // if (stopAdvertisingResult.status === 'advertisingStopped') {
-                //    if (this.platform.is('ios')) {
-                //        await this.delay(4000);
-                //    }
-                // }
+                const stopAdvertisingResult = await this.stopAdvertising();
+                if (stopAdvertisingResult.status === 'advertisingStopped') {
+                    if (this.platform.is('ios')) {
+                        await this.delay(4000);
+                    }
+                }
             }
             await this.manageAdvertisingCycle();
         } catch (e) {
