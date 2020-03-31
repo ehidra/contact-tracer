@@ -4,7 +4,11 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "cordova": {},
+  "cordova": {
+    "preferences": {
+      "WKWebViewOnly": "true"
+    }
+  },
   "linuxAndroidStudioPath": "/home/carlos/android-studio/bin/studio.sh",
   "plugins": {
   }
