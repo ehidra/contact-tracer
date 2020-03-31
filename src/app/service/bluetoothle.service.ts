@@ -136,9 +136,9 @@ export class BluetoothleService {
                             await this.delay(4000);
                         }
                     }
+                    await this.manageAdvertisingCycle();
                 }
             }
-            await this.manageAdvertisingCycle();
         } catch (e) {
             console.log('manageAdvertisingCycleError: ' + e);
         }
