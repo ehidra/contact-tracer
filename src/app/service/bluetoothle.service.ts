@@ -5,22 +5,64 @@ import {AuthService} from '../service/auth.service';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {Platform} from '@ionic/angular';
 import * as forge from 'node-forge';
+import {Plugins} from '@capacitor/core';
+
+const {App, BackgroundTask} = Plugins;
 
 @Injectable({
     providedIn: 'root'
 })
 export class BluetoothleService {
 
-    private connectedTries = [];
+    private connectedTries = null;
     private myDevice = null;
     public isScanning = false;
     public isAdvertising = false;
+    public isActive = true;
 
     constructor(private bluetoothLE: BluetoothLE,
                 private databaseService: DatabaseService,
                 private authService: AuthService,
                 private datePipe: DatePipe,
                 private platform: Platform) {
+
+
+        App.addListener('appStateChange', (state) => {
+
+            this.isActive = state.isActive;
+            if (!state.isActive) {
+                // The app has become inactive. We should check if we have some work left to do, and, if so,
+                // execute a background task that will allow us to finish that work before the OS
+                // suspends or terminates our app:
+
+                const taskId = BackgroundTask.beforeExit(async () => {
+                    // In this function We might finish an upload, let a network request
+                    // finish, persist some data, or perform some other task
+
+                    // Example of long task
+                    if (this.platform.is('ios')) {
+                        // task for 5 secs, delay wont do
+                        // const start = new Date().getTime();
+                        // for (let i = 0; i < 1e18; i++) {
+                        //    if ((new Date().getTime() - start) > 5000) {
+                        //        break;
+                        //    }
+                        // }
+                        await this.stopScan();
+                        await this.startScan();
+
+                        await this.stopAdvertising();
+                        await this.startAdvertising();
+                    }
+                    // Must call in order to end our task otherwise
+                    // we risk our app being terminated, and possibly
+                    // being labeled as impacting battery life
+                    BackgroundTask.finish({
+                        taskId
+                    });
+                });
+            }
+        });
 
     }
 
@@ -84,15 +126,15 @@ export class BluetoothleService {
         try {
             const startAdvertisingResult = await this.startAdvertising();
             if (startAdvertisingResult.status === 'advertisingStarted') {
-                console.log('advertisingStarted');
                 this.isAdvertising = true;
-                await this.delay(4000);
-                const stopAdvertisingResult = await this.stopAdvertising();
-                if (stopAdvertisingResult.status === 'advertisingStopped') {
-                    console.log('advertisingStopped');
-                    this.isAdvertising = false;
-                    if (this.platform.is('ios')) {
-                        await this.delay(4000);
+                if (this.isActive) {
+                    await this.delay(4000);
+                    const stopAdvertisingResult = await this.stopAdvertising();
+                    if (stopAdvertisingResult.status === 'advertisingStopped') {
+                        this.isAdvertising = false;
+                        if (this.platform.is('ios')) {
+                            await this.delay(4000);
+                        }
                     }
                 }
             }
@@ -120,10 +162,12 @@ export class BluetoothleService {
             includeDeviceName: false,
             manufacturerSpecificData: encodedString
         };
+        console.log('startAdvertising');
         return this.bluetoothLE.startAdvertising(params);
     }
 
     stopAdvertising() {
+        console.log('stopAdvertising');
         return this.bluetoothLE.stopAdvertising();
     }
 
@@ -160,14 +204,17 @@ export class BluetoothleService {
     async manageScanCycle() {
         try {
             this.startScan();
-            console.log('Scan Started');
+
             this.isScanning = true;
-            await this.delay(10000);
-            await this.stopScan();
-            console.log('Stop Scan');
-            this.isScanning = false;
-            await this.delay(10000);
-            this.manageScanCycle();
+            if (this.isActive) {
+                await this.delay(10000);
+                await this.stopScan();
+
+                this.isScanning = false;
+                await this.delay(10000);
+                this.manageScanCycle();
+            }
+
         } catch (e) {
             console.log('Error managing Scan Cycle');
             throw Error('Error managing Scan Cycle');
@@ -175,7 +222,8 @@ export class BluetoothleService {
     }
 
     startScan() {
-        this.connectedTries = [];
+        this.connectedTries = new Map();
+
         const params = {
             services: ['1819'],
             allowDuplicates: false,
@@ -184,6 +232,7 @@ export class BluetoothleService {
             matchNum: this.bluetoothLE.MATCH_NUM_MAX_ADVERTISEMENT,
             callbackType: this.bluetoothLE.CALLBACK_TYPE_ALL_MATCHES
         };
+        console.log('Scan startScan');
         this.bluetoothLE.startScan(params).subscribe((successStartScan) => {
 
             if (successStartScan.status === 'scanResult') {
@@ -203,9 +252,10 @@ export class BluetoothleService {
                 const deviceUUidArray = regex.exec(advertisementDecoded);
                 if (deviceUUidArray.length) {
                     const deviceUUid = deviceUUidArray[0];
-                    if (!this.connectedTries.includes(deviceUUid)) {
+                    const now = new Date().getTime();
+                    if (!this.connectedTries.has(deviceUUid) || (new Date().getTime() - this.connectedTries.get(deviceUUid)) > 20000) {
+                        this.connectedTries.set(deviceUUid, now);
                         console.log('connectedTries: ' + JSON.stringify(this.connectedTries));
-                        this.connectedTries.push(deviceUUid);
                         const device = {uuid: deviceUUid, rssi: successStartScan.rssi};
                         this.addDevice(device);
                     }
@@ -218,6 +268,7 @@ export class BluetoothleService {
     }
 
     stopScan() {
+        console.log('Stop Scan');
         return this.bluetoothLE.stopScan();
     }
 

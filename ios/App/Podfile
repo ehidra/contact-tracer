@@ -13,7 +13,6 @@ def capacitor_pods
   pod 'CapacitorFirebaseAuth', :path => '../../node_modules/capacitor-firebase-auth'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
   pod 'CordovaPluginsStatic', :path => '../capacitor-cordova-ios-plugins'
-  pod 'CordovaPluginsResources', :path => '../capacitor-cordova-ios-plugins'
   # Do not delete
 end
 

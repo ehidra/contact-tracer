@@ -56,8 +56,8 @@ export class DatabaseService {
     }
 
     truncate() {
-        const settingSql = 'DELETE FROM settings';
-        this.db.executeSql(settingSql, []);
+        // const settingSql = 'DELETE FROM settings';
+        // this.db.executeSql(settingSql, []);
         const sql = 'DELETE FROM devices';
         return this.db.executeSql(sql, []);
     }
