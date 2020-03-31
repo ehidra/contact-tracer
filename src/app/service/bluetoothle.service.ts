@@ -41,17 +41,17 @@ export class BluetoothleService {
 
                     // Example of long task
                     if (this.platform.is('ios')) {
-                        // task for 5 secs, delay wont do
-                        // const start = new Date().getTime();
-                        // for (let i = 0; i < 1e18; i++) {
-                        //    if ((new Date().getTime() - start) > 5000) {
-                        //        break;
-                        //    }
-                        // }
-                        await this.stopScan();
+                        // task for 10 secs, delay wont do
+                        const start = new Date().getTime();
+                        for (let i = 0; i < 1e18; i++) {
+                            if ((new Date().getTime() - start) > 5000) {
+                                break;
+                            }
+                        }
+                        // await this.stopScan();
                         await this.startScan();
 
-                        await this.stopAdvertising();
+                        // await this.stopAdvertising();
                         await this.startAdvertising();
                     }
                     // Must call in order to end our task otherwise
