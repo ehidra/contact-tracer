@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
@@ -18,7 +17,6 @@ export class AppComponent {
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private backgroundMode: BackgroundMode,
         private bluetoothLE: BluetoothLE,
         private databaseService: DatabaseService,
         private authService: AuthService,
@@ -33,7 +31,6 @@ export class AppComponent {
         try {
             await this.platform.ready();
             this.statusBar.styleDefault();
-            this.backgroundMode.setDefaults({silent: true});
             if (this.platform.is('android')) {
                 await this.permission();
             }
@@ -41,7 +38,6 @@ export class AppComponent {
             await this.databaseService.createDatabase();
             await this.authService.connect();
             await this.loadingService.dismiss();
-            this.backgroundMode.enable();
         } catch (e) {
             console.log('Error initialising app');
             throw new Error('Error initialising app');

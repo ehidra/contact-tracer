@@ -1,5 +1,5 @@
 {
-  "name": "Contact Tracer",
+  "name": "contact-tracer",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -19,7 +19,6 @@
     "@capacitor/android": "^2.0.0-beta.1",
     "@capacitor/core": "^2.0.0-beta.1",
     "@capacitor/ios": "^2.0.0-beta.1",
-    "@ionic-native/background-mode": "^5.22.0",
     "@ionic-native/bluetooth-le": "^5.22.0",
     "@ionic-native/core": "^5.22.0",
     "@ionic-native/firebase-authentication": "^5.23.0",
@@ -29,7 +28,6 @@
     "@ionic/angular": "^5.0.5",
     "@types/node-forge": "^0.9.3",
     "capacitor-firebase-auth": "^0.3.0",
-    "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-bluetoothle": "^4.5.9",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-firebase-authentication": "^3.1.0",
