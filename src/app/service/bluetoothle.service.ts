@@ -103,17 +103,15 @@ export class BluetoothleService {
             }
             if (startAdvertisingResult.status === 'advertisingStarted' || this.isAdvertising) {
                 this.isAdvertising = true;
-                if (this.isActive || this.platform.is('android')) {
-                    await this.delay(4000);
-                    const stopAdvertisingResult = await this.stopAdvertising();
-                    if (stopAdvertisingResult.status === 'advertisingStopped') {
-                        this.isAdvertising = false;
-                        if (this.platform.is('ios')) {
-                            await this.delay(4000);
-                        }
+                await this.delay(4000);
+                const stopAdvertisingResult = await this.stopAdvertising();
+                if (stopAdvertisingResult.status === 'advertisingStopped') {
+                    this.isAdvertising = false;
+                    if (this.platform.is('ios')) {
+                        await this.delay(4000);
                     }
-                    await this.manageAdvertisingCycle();
                 }
+                await this.manageAdvertisingCycle();
             }
         } catch (e) {
             console.log('manageAdvertisingCycleError: ' + JSON.stringify(e));
@@ -186,14 +184,12 @@ export class BluetoothleService {
             this.startScan();
 
             this.isScanning = true;
-            if (this.isActive || this.platform.is('android')) {
-                await this.delay(10000);
-                await this.stopScan();
+            await this.delay(10000);
+            await this.stopScan();
 
-                this.isScanning = false;
-                await this.delay(10000);
-                this.manageScanCycle();
-            }
+            this.isScanning = false;
+            await this.delay(10000);
+            this.manageScanCycle();
 
         } catch (e) {
             console.log('Error managing Scan Cycle');
