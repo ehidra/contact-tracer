@@ -103,7 +103,7 @@ export class BluetoothleService {
             }
             if (startAdvertisingResult.status === 'advertisingStarted' || this.isAdvertising) {
                 this.isAdvertising = true;
-                if (this.isActive) {
+                if (this.isActive || this.platform.is('android')) {
                     await this.delay(4000);
                     const stopAdvertisingResult = await this.stopAdvertising();
                     if (stopAdvertisingResult.status === 'advertisingStopped') {
