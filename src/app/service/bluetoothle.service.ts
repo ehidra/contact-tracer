@@ -186,7 +186,7 @@ export class BluetoothleService {
             this.startScan();
 
             this.isScanning = true;
-            if (this.isActive) {
+            if (this.isActive || this.platform.is('android')) {
                 await this.delay(10000);
                 await this.stopScan();
 
