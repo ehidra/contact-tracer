@@ -34,33 +34,6 @@ export class BluetoothleService {
                 // The app has become inactive. We should check if we have some work left to do, and, if so,
                 // execute a background task that will allow us to finish that work before the OS
                 // suspends or terminates our app:
-
-                const taskId = BackgroundTask.beforeExit(async () => {
-                    // In this function We might finish an upload, let a network request
-                    // finish, persist some data, or perform some other task
-
-                    // Example of long task
-                    if (this.platform.is('ios')) {
-                        // task for 10 secs, delay wont do
-                        const start = new Date().getTime();
-                        for (let i = 0; i < 1e18; i++) {
-                            if ((new Date().getTime() - start) > 5000) {
-                                break;
-                            }
-                        }
-                        // await this.stopScan();
-                        await this.startScan();
-
-                        // await this.stopAdvertising();
-                        await this.startAdvertising();
-                    }
-                    // Must call in order to end our task otherwise
-                    // we risk our app being terminated, and possibly
-                    // being labeled as impacting battery life
-                    BackgroundTask.finish({
-                        taskId
-                    });
-                });
             }
         });
 
@@ -124,8 +97,11 @@ export class BluetoothleService {
     async manageAdvertisingCycle() {
 
         try {
-            const startAdvertisingResult = await this.startAdvertising();
-            if (startAdvertisingResult.status === 'advertisingStarted') {
+            let startAdvertisingResult = {status: 'pending'};
+            if (this.isAdvertising === false) {
+                startAdvertisingResult = await this.startAdvertising();
+            }
+            if (startAdvertisingResult.status === 'advertisingStarted' || this.isAdvertising) {
                 this.isAdvertising = true;
                 if (this.isActive) {
                     await this.delay(4000);
@@ -140,7 +116,11 @@ export class BluetoothleService {
                 }
             }
         } catch (e) {
-            console.log('manageAdvertisingCycleError: ' + e);
+            console.log('manageAdvertisingCycleError: ' + JSON.stringify(e));
+            if (e.message === 'Advertising already started') {
+                this.isAdvertising = true;
+                this.manageAdvertisingCycle();
+            }
         }
     }
 
@@ -241,8 +221,13 @@ export class BluetoothleService {
                 const advertisementResult = successStartScan.advertisement;
                 if (typeof advertisementResult !== 'string') {
                     // IOS
-                    const advertisement = advertisementResult.manufacturerData;
-                    advertisementDecoded = atob(advertisement);
+                    if (advertisementResult.manufacturerData) {
+                        const advertisement = advertisementResult.manufacturerData;
+                        advertisementDecoded = atob(advertisement);
+                    } else {
+                        advertisementDecoded = successStartScan.name;
+                    }
+
                 } else {
                     // Android
                     const byteString = this.bluetoothLE.encodedStringToBytes(advertisementResult);

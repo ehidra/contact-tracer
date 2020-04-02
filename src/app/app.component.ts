@@ -1,12 +1,11 @@
 import {Component} from '@angular/core';
-import {Platform} from '@ionic/angular';
+import {Platform, NavController} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {BluetoothLE} from '@ionic-native/bluetooth-le/ngx';
 import {DatabaseService} from './service/database.service';
 import {LoadingService} from './service/loading.service';
 import {AuthService} from './service/auth.service';
-
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -20,7 +19,8 @@ export class AppComponent {
         private bluetoothLE: BluetoothLE,
         private databaseService: DatabaseService,
         private authService: AuthService,
-        private loadingService: LoadingService
+        private loadingService: LoadingService,
+        private navCtrl: NavController
     ) {
         this.initializeApp();
 
@@ -38,6 +38,7 @@ export class AppComponent {
             await this.databaseService.createDatabase();
             await this.authService.connect();
             await this.loadingService.dismiss();
+            await this.navCtrl.navigateRoot('/scan');
         } catch (e) {
             console.log('Error initialising app');
             throw new Error('Error initialising app');
