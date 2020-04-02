@@ -224,7 +224,7 @@ export class BluetoothleService {
                     if (advertisementResult.manufacturerData) {
                         const advertisement = advertisementResult.manufacturerData;
                         advertisementDecoded = atob(advertisement);
-                    } else {
+                    } else if (successStartScan.name != null) {
                         advertisementDecoded = successStartScan.name;
                     }
 
