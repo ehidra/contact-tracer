@@ -1,5 +1,7 @@
 # COVID-19 Contact Tracer
 
+## Note:
+This project halted in April 2020 once Singapore open-sourced' their code. You should go to https://github.com/opentrace-community. This is here for historical reasons.
 
 ## Background
 
