@@ -27,7 +27,7 @@ export class AuthService {
 
     async connect() {
 
-        if (environment.firebaseAuth) {
+        if (environment.firebase) {
             this.firebaseAuthentication.onAuthStateChanged().subscribe(async (successOnAuthStateChange) => {
                     console.log('successOnAuthStateChange: ' + JSON.stringify(successOnAuthStateChange));
                     if (successOnAuthStateChange !== '' && successOnAuthStateChange.uid) {
