@@ -10,7 +10,7 @@
   "private": true,
   "dependencies": {
     "@angular/common": "~8.2.14",
-    "@angular/core": "~8.2.14",
+    "@angular/core": "~11.0.5",
     "@angular/fire": "^5.4.2",
     "@angular/forms": "~8.2.14",
     "@angular/platform-browser": "~8.2.14",
